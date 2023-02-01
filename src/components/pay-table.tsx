@@ -1,9 +1,12 @@
 import './pay-table.scss';
 
-import { useState } from 'react';
+interface Props {
+    bet: number;
+    columnClickCallback: (bet: number) => void;
+}
 
-export const PayTable = () => {
-    const [selectedColumn, setSelectedColumn] = useState<number>(0);
+export const PayTable = (props: Props) => {
+    const { bet, columnClickCallback } = props;
 
     const tableData = [
         {
@@ -53,16 +56,14 @@ export const PayTable = () => {
         },
     ];
 
-    const handleCellClick = (index: number) => {
-        setSelectedColumn(index);
-    };
-
     return (
         <table>
             <thead>
                 <tr>
                     <th>Комбинация</th>
-                    <th colSpan={5}>Множитель выигрыша</th>
+                    <th colSpan={5}>
+                        Множитель выигрыша (1$ x <i>n</i>)
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -71,8 +72,8 @@ export const PayTable = () => {
                         <td>{row.title}</td>
                         {row.multipliers.map((cell, index) => (
                             <td
-                                className={`cell ${selectedColumn === index ? 'selected' : ''}`}
-                                onClick={() => handleCellClick(index)}
+                                className={`cell ${bet - 1 === index ? 'selected' : ''}`}
+                                onClick={() => columnClickCallback(index + 1)}
                             >
                                 {cell}
                             </td>
