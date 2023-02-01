@@ -1,5 +1,10 @@
+import { PayTable } from "./components/pay-table";
+
 function App() {
-  return <div></div>;
+
+  return (
+    <PayTable />
+  );
 }
 
 export default App;
