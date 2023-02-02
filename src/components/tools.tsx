@@ -7,10 +7,20 @@ interface Props {
     won: boolean;
     raiseBetCallback: () => void;
     maxBetCallback: () => void;
+    dealCallback: () => void;
+    replaceCallback: () => void;
+    collectCallback: () => void;
 }
 
 export const Tools = (props: Props) => {
     const { bet, gameIsOn, cardsHeld, won, raiseBetCallback, maxBetCallback } = props;
+
+    const handleResultButtonClick = () => {
+        if (gameIsOn) {
+            if (cardsHeld) props.replaceCallback();
+            else props.collectCallback();
+        } else props.dealCallback();
+    };
 
     return (
         <div>
@@ -18,7 +28,7 @@ export const Tools = (props: Props) => {
                 disabled={gameIsOn}
                 onClick={raiseBetCallback}
             >
-                Увеличить ставку
+                Изменить ставку
             </button>
             &nbsp;&nbsp;&nbsp;
             <span>{bet}$</span>
@@ -32,7 +42,9 @@ export const Tools = (props: Props) => {
             &nbsp;&nbsp;&nbsp;
             {won && <button>Удвоить</button>}
             &nbsp;&nbsp;&nbsp;
-            <button>{cardsHeld ? 'Заменить карты' : 'Сдать'}</button>
+            <button onClick={handleResultButtonClick}>
+                {cardsHeld ? 'Заменить карты' : gameIsOn ? 'Завершить' : 'Сдать'}
+            </button>
         </div>
     );
 };

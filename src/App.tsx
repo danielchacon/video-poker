@@ -24,6 +24,9 @@ function App() {
                 won={false}
                 raiseBetCallback={raiseBet}
                 maxBetCallback={() => setBet(5)}
+                dealCallback={() => {}}
+                replaceCallback={() => {}}
+                collectCallback={() => {}}
             />
         </div>
     );
