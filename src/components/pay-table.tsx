@@ -2,6 +2,7 @@ import './pay-table.scss';
 
 interface Props {
     bet: number;
+    gameIsOn: boolean;
     columnClickCallback: (bet: number) => void;
 }
 
@@ -74,7 +75,9 @@ export const PayTable = (props: Props) => {
                             <td
                                 key={`${rowIndex}${cellIndex}`}
                                 className={`cell ${bet - 1 === cellIndex ? 'selected' : ''}`}
-                                onClick={() => columnClickCallback(cellIndex + 1)}
+                                onClick={() => {
+                                    if (!props.gameIsOn) columnClickCallback(cellIndex + 1);
+                                }}
                             >
                                 {cell}
                             </td>

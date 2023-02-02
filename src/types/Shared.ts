@@ -27,6 +27,7 @@ export interface Suit {
 export type Rank = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | RankNames;
 
 export interface Card {
+    id: number;
     rank: Rank;
     suit: Suit;
 }

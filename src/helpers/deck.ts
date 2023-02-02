@@ -36,9 +36,12 @@ export const getNewDeck = (): Card[] => {
     ];
     let cards: Card[] = [];
 
+    // create random number id
+
     for (let suit in suits) {
         for (let rank in ranks) {
             cards.push({
+                id: Math.floor(Math.random() * 10000),
                 rank: ranks[rank],
                 suit: suits[suit],
             });
