@@ -67,13 +67,14 @@ export const PayTable = (props: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {tableData.map(row => (
-                    <tr>
+                {tableData.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
                         <td>{row.title}</td>
-                        {row.multipliers.map((cell, index) => (
+                        {row.multipliers.map((cell, cellIndex) => (
                             <td
-                                className={`cell ${bet - 1 === index ? 'selected' : ''}`}
-                                onClick={() => columnClickCallback(index + 1)}
+                                key={`${rowIndex}${cellIndex}`}
+                                className={`cell ${bet - 1 === cellIndex ? 'selected' : ''}`}
+                                onClick={() => columnClickCallback(cellIndex + 1)}
                             >
                                 {cell}
                             </td>

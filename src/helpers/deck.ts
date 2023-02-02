@@ -1,35 +1,65 @@
-class DeckOfCards {
-  private cards: string[] = [];
+import { SuitNames, SuitSymbols, Suit, Rank, RankNames, Card } from '../types/Shared';
 
-  constructor() {
-    const suits = ["Hearts", "Spades", "Clubs", "Diamonds"];
-    const values = ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King"];
+export const getNewDeck = (): Card[] => {
+    const suits: Suit[] = [
+        {
+            name: SuitNames.HEARTS,
+            symbol: SuitSymbols.HEARTS,
+        },
+        {
+            name: SuitNames.CLUBS,
+            symbol: SuitSymbols.CLUBS,
+        },
+        {
+            name: SuitNames.DIAMONDS,
+            symbol: SuitSymbols.DIAMONDS,
+        },
+        {
+            name: SuitNames.SPADES,
+            symbol: SuitSymbols.SPADES,
+        },
+    ];
+    const ranks: Rank[] = [
+        RankNames.ACE,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        RankNames.JACK,
+        RankNames.QUEEN,
+        RankNames.KING,
+    ];
+    let cards: Card[] = [];
 
     for (let suit in suits) {
-      for (let value in values) {
-        this.cards.push(`${values[value]} of ${suits[suit]}`);
-      }
+        for (let rank in ranks) {
+            cards.push({
+                rank: ranks[rank],
+                suit: suits[suit],
+            });
+        }
     }
-  }
 
-  shuffle() {
-    let currentIndex = this.cards.length;
+    return cards;
+};
+
+export const shuffleDeck = (deck: Card[]) => {
+    let currentIndex = deck.length;
 
     while (0 !== currentIndex) {
-      let randomIndex = Math.floor(Math.random() * currentIndex);
+        let randomIndex = Math.floor(Math.random() * currentIndex);
 
-      currentIndex -= 1;
+        currentIndex -= 1;
 
-      let tempValue = this.cards[currentIndex];
+        let tempValue = deck[currentIndex];
 
-      this.cards[currentIndex] = this.cards[randomIndex];
+        deck[currentIndex] = deck[randomIndex];
 
-      this.cards[randomIndex] = tempValue;
+        deck[randomIndex] = tempValue;
     }
-
-    return this.cards;
-  }
-}
-
-// const deckOfCards = new DeckOfCards();
-// deckOfCards.shuffle();
+};
