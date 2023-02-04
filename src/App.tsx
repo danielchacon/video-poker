@@ -4,12 +4,14 @@ import { PayTable } from './components/pay-table';
 import { CardList } from './components/card-list';
 import { Tools } from './components/tools';
 
-import { getNewDeck, shuffleDeck } from './helpers/deck';
+import { getDeck, shuffleDeck } from './helpers/deck';
+import { checkRankings } from './helpers/rankings';
 
 import { Card } from './types/Shared';
 
 function App() {
     const [bet, setBet] = useState(1);
+    const [deck, setDeck] = useState<Card[]>([]);
     const [cardList, setCardList] = useState<Card[]>([]);
     const [heldCards, setHeldCards] = useState<Card[]>([]);
     const [gameIsOn, setGameIsOn] = useState(false);
@@ -18,21 +20,49 @@ function App() {
         setBet(bet + 1 > 5 ? 1 : bet + 1);
     };
 
-    const handleDeal = () => {
-        const deckOfCards = getNewDeck();
-
-        shuffleDeck(deckOfCards);
-
-        const initialCardList = deckOfCards.slice(0, 5);
-
-        setCardList(initialCardList);
-        setGameIsOn(true);
-    };
-
     const handleCardClick = (card: Card) => {
         if (heldCards.some(el => el.id === card.id)) {
             setHeldCards(heldCards.filter(el => el.id !== card.id));
         } else setHeldCards([...heldCards, card]);
+    };
+
+    const handleDeal = () => {
+        let deck = getDeck();
+
+        shuffleDeck(deck);
+
+        const initialCardList = deck.slice(0, 5);
+        deck = deck.slice(5, deck.length);
+
+        setDeck(deck);
+        setCardList(initialCardList);
+        setGameIsOn(true);
+    };
+
+    const handleReplace = () => {
+        const tempCardList: Card[] = [...cardList];
+        let tempDeck: Card[] = [...deck];
+
+        for (let card in tempCardList) {
+            if (heldCards.some(heldCard => heldCard.id === tempCardList[card].id)) {
+                tempCardList[card] = tempDeck[0];
+
+                tempDeck = tempDeck.slice(1, deck.length);
+            }
+        }
+
+        checkRankings(tempCardList);
+
+        setDeck(tempDeck);
+        setCardList(tempCardList);
+        setHeldCards([]);
+        setGameIsOn(false);
+    };
+
+    const handleCollect = () => {
+        checkRankings(cardList);
+
+        setGameIsOn(false);
     };
 
     return (
@@ -44,6 +74,7 @@ function App() {
             />
             <br></br>
             <CardList
+                gameIsOn={gameIsOn}
                 cardList={cardList}
                 heldCards={heldCards}
                 cardClickCallback={handleCardClick}
@@ -57,8 +88,8 @@ function App() {
                 raiseBetCallback={raiseBet}
                 maxBetCallback={() => setBet(5)}
                 dealCallback={handleDeal}
-                replaceCallback={() => {}}
-                collectCallback={() => {}}
+                replaceCallback={handleReplace}
+                collectCallback={handleCollect}
             />
         </div>
     );

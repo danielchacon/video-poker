@@ -30,4 +30,14 @@ export interface Card {
     id: number;
     rank: Rank;
     suit: Suit;
+    weight: number;
+}
+
+export enum Rankings {
+    STRAIGHT = 'Straight',
+    FOUR_OF_A_KIND = 'Four of a Kind',
+    FULL_HOUSE = 'Full House',
+    THREE_OF_A_KIND = 'Three of a Kind',
+    TWO_PAIRS = 'Two Pairs',
+    JACKS_OR_BETTER = 'Jacks or Better',
 }

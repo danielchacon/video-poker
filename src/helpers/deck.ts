@@ -1,24 +1,43 @@
 import { SuitNames, SuitSymbols, Suit, Rank, RankNames, Card } from '../types/Shared';
 
-export const getNewDeck = (): Card[] => {
-    const suits: Suit[] = [
-        {
-            name: SuitNames.HEARTS,
-            symbol: SuitSymbols.HEARTS,
-        },
-        {
-            name: SuitNames.CLUBS,
-            symbol: SuitSymbols.CLUBS,
-        },
-        {
-            name: SuitNames.DIAMONDS,
-            symbol: SuitSymbols.DIAMONDS,
-        },
-        {
-            name: SuitNames.SPADES,
-            symbol: SuitSymbols.SPADES,
-        },
-    ];
+const getCardWeight = (rank: Rank): number => {
+    if (rank === RankNames.ACE) return 14;
+    else if (rank === RankNames.KING) return 13;
+    else if (rank === RankNames.QUEEN) return 12;
+    else if (rank === RankNames.JACK) return 11;
+    else return rank;
+};
+
+export const createCard = (rank: Rank, suit: Suit) => {
+    return {
+        id: Math.floor(Math.random() * 10000),
+        rank,
+        suit,
+        weight: getCardWeight(rank),
+    };
+};
+
+export const suitMap = {
+    hearts: {
+        name: SuitNames.HEARTS,
+        symbol: SuitSymbols.HEARTS,
+    },
+    clubs: {
+        name: SuitNames.CLUBS,
+        symbol: SuitSymbols.CLUBS,
+    },
+    diamonds: {
+        name: SuitNames.DIAMONDS,
+        symbol: SuitSymbols.DIAMONDS,
+    },
+    spades: {
+        name: SuitNames.SPADES,
+        symbol: SuitSymbols.SPADES,
+    },
+};
+
+export const getDeck = (): Card[] => {
+    const suits: Suit[] = [suitMap.hearts, suitMap.clubs, suitMap.diamonds, suitMap.spades];
     const ranks: Rank[] = [
         RankNames.ACE,
         2,
@@ -32,19 +51,12 @@ export const getNewDeck = (): Card[] => {
         10,
         RankNames.JACK,
         RankNames.QUEEN,
-        RankNames.KING,
     ];
     let cards: Card[] = [];
 
-    // create random number id
-
-    for (let suit in suits) {
-        for (let rank in ranks) {
-            cards.push({
-                id: Math.floor(Math.random() * 10000),
-                rank: ranks[rank],
-                suit: suits[suit],
-            });
+    for (let i = 0; i < suits.length; i++) {
+        for (let j = 0; j < ranks.length; j++) {
+            cards.push(createCard(ranks[j], suits[i]));
         }
     }
 
