@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface Props {
     bet: number;
     gameIsOn: boolean;
@@ -9,17 +7,14 @@ interface Props {
     maxBetCallback: () => void;
     dealCallback: () => void;
     replaceCallback: () => void;
-    collectCallback: () => void;
 }
 
 export const Tools = (props: Props) => {
-    const { bet, gameIsOn, cardsHeld, won, raiseBetCallback, maxBetCallback } = props;
+    const { bet, gameIsOn, won, raiseBetCallback, maxBetCallback } = props;
 
     const handleResultButtonClick = () => {
-        if (gameIsOn) {
-            if (cardsHeld) props.replaceCallback();
-            else props.collectCallback();
-        } else props.dealCallback();
+        if (gameIsOn) props.replaceCallback();
+        else props.dealCallback();
     };
 
     return (
@@ -43,7 +38,7 @@ export const Tools = (props: Props) => {
             {won && <button>Удвоить</button>}
             &nbsp;&nbsp;&nbsp;
             <button onClick={handleResultButtonClick}>
-                {cardsHeld ? 'Заменить карты' : gameIsOn ? 'Завершить' : 'Сдать'}
+                {gameIsOn ? 'Заменить карты' : 'Сдать'}
             </button>
         </div>
     );

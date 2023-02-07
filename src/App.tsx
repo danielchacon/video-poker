@@ -8,7 +8,7 @@ import { UserBar } from './components/user-bar';
 import { getDeck, shuffleDeck } from './helpers/deck';
 import { checkRankings } from './helpers/rankings';
 
-import { Card, Rankings, WinRanking } from './types/Shared';
+import { Card, Rankings, WinRanking, Action } from './types/Shared';
 
 import { multipliers } from './constants/multipliers';
 
@@ -20,13 +20,20 @@ function App() {
     const [heldCards, setHeldCards] = useState<Card[]>([]);
     const [gameIsOn, setGameIsOn] = useState(false);
     const [winRanking, setWinRanking] = useState<WinRanking | null>(null);
+    const [lastAction, setLastAction] = useState<Action | null>(null);
 
     const raiseBet = () => {
         setBet(bet + 1 > 5 ? 1 : bet + 1);
     };
 
     const payTheWin = (ranking: Rankings) => {
-        setBalance(balance + multipliers[ranking][bet - 1]);
+        const win = multipliers[ranking][bet - 1];
+
+        setBalance(balance + win);
+        setLastAction({
+            type: 'win',
+            text: `+${win}$`,
+        });
     };
 
     const handleCardClick = (card: Card) => {
@@ -37,6 +44,10 @@ function App() {
 
     const handleDeal = () => {
         setBalance(balance - bet);
+        setLastAction({
+            type: 'bet',
+            text: `-${bet}$`,
+        });
 
         let deck = getDeck();
 
@@ -45,7 +56,7 @@ function App() {
         const initialCardList = deck.slice(0, 5);
         deck = deck.slice(5, deck.length);
 
-        setWinRanking(null);        
+        setWinRanking(null);
         setDeck(deck);
         setCardList(initialCardList);
         setGameIsOn(true);
@@ -55,7 +66,7 @@ function App() {
         const tempCardList: Card[] = [...cardList];
         let tempDeck: Card[] = [...deck];
 
-        for (let i = 0; i < tempCardList.length; i++) {            
+        for (let i = 0; i < tempCardList.length; i++) {
             if (!heldCards.some(heldCard => heldCard.id === tempCardList[i].id)) {
                 tempCardList[i] = tempDeck[0];
 
@@ -76,20 +87,12 @@ function App() {
         setGameIsOn(false);
     };
 
-    const handleCollect = () => {
-        const ranking = checkRankings(cardList);
-
-        if (ranking) {
-            setWinRanking(ranking);
-            payTheWin(ranking.name);
-        }
-
-        setGameIsOn(false);
-    };
-
     return (
         <div>
-            <UserBar balance={balance} />
+            <UserBar
+                balance={balance}
+                lastAction={lastAction}
+            />
             <br></br>
             <PayTable
                 bet={bet}
@@ -115,7 +118,6 @@ function App() {
                 maxBetCallback={() => setBet(5)}
                 dealCallback={handleDeal}
                 replaceCallback={handleReplace}
-                collectCallback={handleCollect}
             />
         </div>
     );

@@ -53,3 +53,8 @@ export interface WinRanking {
 export interface Multipliers {
     [key: string]: number[];
 }
+
+export interface Action {
+    type: 'bet' | 'win',
+    text: string;
+}
