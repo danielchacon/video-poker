@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PayTable } from './components/pay-table';
 import { CardList } from './components/card-list';
@@ -36,13 +36,7 @@ function App() {
         });
     };
 
-    const handleCardClick = (card: Card) => {
-        if (heldCards.some(el => el.id === card.id)) {
-            setHeldCards(heldCards.filter(el => el.id !== card.id));
-        } else setHeldCards([...heldCards, card]);
-    };
-
-    const handleDeal = () => {
+    const deal = () => {
         setBalance(balance - bet);
         setLastAction({
             type: 'bet',
@@ -56,10 +50,24 @@ function App() {
         const initialCardList = deck.slice(0, 5);
         deck = deck.slice(5, deck.length);
 
-        setWinRanking(null);
+        const ranking = checkRankings(initialCardList);
+
+        setWinRanking(ranking || null);
         setDeck(deck);
+        setHeldCards([]);
         setCardList(initialCardList);
         setGameIsOn(true);
+    };
+
+    const handleMaxBet = () => {
+        setBet(5);
+        deal();
+    };
+
+    const handleCardClick = (card: Card) => {
+        if (heldCards.some(el => el.id === card.id)) {
+            setHeldCards(heldCards.filter(el => el.id !== card.id));
+        } else setHeldCards([...heldCards, card]);
     };
 
     const handleReplace = () => {
@@ -76,14 +84,12 @@ function App() {
 
         const ranking = checkRankings(tempCardList);
 
-        if (ranking) {
-            setWinRanking(ranking);
-            payTheWin(ranking.name);
-        }
+        setWinRanking(ranking || null);
+
+        if (ranking) payTheWin(ranking.name);
 
         setDeck(tempDeck);
-        setCardList(tempCardList);
-        setHeldCards([]);
+        setCardList(tempCardList);        
         setGameIsOn(false);
     };
 
@@ -115,8 +121,8 @@ function App() {
                 cardsHeld={heldCards.length > 0}
                 won={false}
                 raiseBetCallback={raiseBet}
-                maxBetCallback={() => setBet(5)}
-                dealCallback={handleDeal}
+                maxBetCallback={handleMaxBet}
+                dealCallback={deal}
                 replaceCallback={handleReplace}
             />
         </div>

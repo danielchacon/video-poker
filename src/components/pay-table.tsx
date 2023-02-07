@@ -66,7 +66,7 @@ export const PayTable = (props: Props) => {
                 <tr>
                     <th>Комбинация</th>
                     <th colSpan={5}>
-                        Множитель выигрыша (1$ x <i>n</i>)
+                        Множитель выигрыша (<i>n</i>$)
                     </th>
                 </tr>
             </thead>
