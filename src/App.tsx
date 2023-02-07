@@ -1,15 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { PayTable } from './components/pay-table';
 import { CardList } from './components/card-list';
 import { Tools } from './components/tools';
+import { UserBar } from './components/user-bar';
 
 import { getDeck, shuffleDeck } from './helpers/deck';
 import { checkRankings } from './helpers/rankings';
 
-import { Card } from './types/Shared';
+import { Card, Rankings } from './types/Shared';
+
+import { multipliers } from './constants/multipliers';
 
 function App() {
+    const [balance, setBalance] = useState(100);
     const [bet, setBet] = useState(1);
     const [deck, setDeck] = useState<Card[]>([]);
     const [cardList, setCardList] = useState<Card[]>([]);
@@ -20,6 +24,10 @@ function App() {
         setBet(bet + 1 > 5 ? 1 : bet + 1);
     };
 
+    const payTheWin = (ranking: Rankings) => {
+        setBalance(balance + multipliers[ranking][bet - 1]);
+    };
+
     const handleCardClick = (card: Card) => {
         if (heldCards.some(el => el.id === card.id)) {
             setHeldCards(heldCards.filter(el => el.id !== card.id));
@@ -27,6 +35,8 @@ function App() {
     };
 
     const handleDeal = () => {
+        setBalance(balance - bet);
+
         let deck = getDeck();
 
         shuffleDeck(deck);
@@ -53,6 +63,8 @@ function App() {
 
         const ranking = checkRankings(tempCardList);
 
+        if (ranking) payTheWin(ranking);
+
         setDeck(tempDeck);
         setCardList(tempCardList);
         setHeldCards([]);
@@ -62,11 +74,15 @@ function App() {
     const handleCollect = () => {
         const ranking = checkRankings(cardList);
 
+        if (ranking) payTheWin(ranking);
+
         setGameIsOn(false);
     };
 
     return (
         <div>
+            <UserBar balance={balance} />
+            <br></br>
             <PayTable
                 bet={bet}
                 gameIsOn={gameIsOn}
