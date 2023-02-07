@@ -19,7 +19,7 @@ function App() {
     const [cardList, setCardList] = useState<Card[]>([]);
     const [heldCards, setHeldCards] = useState<Card[]>([]);
     const [gameIsOn, setGameIsOn] = useState(false);
-    const [winRanking, setWinRanking] = useState<WinRanking | null>(null)
+    const [winRanking, setWinRanking] = useState<WinRanking | null>(null);
 
     const raiseBet = () => {
         setBet(bet + 1 > 5 ? 1 : bet + 1);
@@ -45,7 +45,7 @@ function App() {
         const initialCardList = deck.slice(0, 5);
         deck = deck.slice(5, deck.length);
 
-        setWinRanking(null);
+        setWinRanking(null);        
         setDeck(deck);
         setCardList(initialCardList);
         setGameIsOn(true);
@@ -55,9 +55,9 @@ function App() {
         const tempCardList: Card[] = [...cardList];
         let tempDeck: Card[] = [...deck];
 
-        for (let card in tempCardList) {
-            if (heldCards.some(heldCard => heldCard.id === tempCardList[card].id)) {
-                tempCardList[card] = tempDeck[0];
+        for (let i = 0; i < tempCardList.length; i++) {            
+            if (!heldCards.some(heldCard => heldCard.id === tempCardList[i].id)) {
+                tempCardList[i] = tempDeck[0];
 
                 tempDeck = tempDeck.slice(1, deck.length);
             }
@@ -68,7 +68,7 @@ function App() {
         if (ranking) {
             setWinRanking(ranking);
             payTheWin(ranking.name);
-        };
+        }
 
         setDeck(tempDeck);
         setCardList(tempCardList);
@@ -82,7 +82,7 @@ function App() {
         if (ranking) {
             setWinRanking(ranking);
             payTheWin(ranking.name);
-        };
+        }
 
         setGameIsOn(false);
     };
