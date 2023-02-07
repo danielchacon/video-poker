@@ -8,7 +8,7 @@ import { UserBar } from './components/user-bar';
 import { getDeck, shuffleDeck } from './helpers/deck';
 import { checkRankings } from './helpers/rankings';
 
-import { Card, Rankings } from './types/Shared';
+import { Card, Rankings, WinRanking } from './types/Shared';
 
 import { multipliers } from './constants/multipliers';
 
@@ -19,6 +19,7 @@ function App() {
     const [cardList, setCardList] = useState<Card[]>([]);
     const [heldCards, setHeldCards] = useState<Card[]>([]);
     const [gameIsOn, setGameIsOn] = useState(false);
+    const [winRanking, setWinRanking] = useState<WinRanking | null>(null)
 
     const raiseBet = () => {
         setBet(bet + 1 > 5 ? 1 : bet + 1);
@@ -44,6 +45,7 @@ function App() {
         const initialCardList = deck.slice(0, 5);
         deck = deck.slice(5, deck.length);
 
+        setWinRanking(null);
         setDeck(deck);
         setCardList(initialCardList);
         setGameIsOn(true);
@@ -63,7 +65,10 @@ function App() {
 
         const ranking = checkRankings(tempCardList);
 
-        if (ranking) payTheWin(ranking);
+        if (ranking) {
+            setWinRanking(ranking);
+            payTheWin(ranking.name);
+        };
 
         setDeck(tempDeck);
         setCardList(tempCardList);
@@ -74,7 +79,10 @@ function App() {
     const handleCollect = () => {
         const ranking = checkRankings(cardList);
 
-        if (ranking) payTheWin(ranking);
+        if (ranking) {
+            setWinRanking(ranking);
+            payTheWin(ranking.name);
+        };
 
         setGameIsOn(false);
     };
@@ -86,6 +94,7 @@ function App() {
             <PayTable
                 bet={bet}
                 gameIsOn={gameIsOn}
+                winRanking={winRanking}
                 columnClickCallback={bet => setBet(bet)}
             />
             <br></br>
@@ -93,6 +102,7 @@ function App() {
                 gameIsOn={gameIsOn}
                 cardList={cardList}
                 heldCards={heldCards}
+                winRanking={winRanking}
                 cardClickCallback={handleCardClick}
             />
             <br></br>

@@ -44,3 +44,12 @@ export enum Rankings {
     STRAIGHT_FLUSH = 'Straight Flush',
     ROYAL_FLUSH = 'Royal Flush',
 }
+
+export interface WinRanking {
+    name: Rankings;
+    cards?: Card[];
+}
+
+export interface Multipliers {
+    [key: string]: number[];
+}

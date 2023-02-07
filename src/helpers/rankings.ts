@@ -1,10 +1,13 @@
 import { Card, RankNames, Rankings } from '../types/Shared';
+import { WinRanking } from '../types/Shared';
+
+type CheckRankingResult = WinRanking | undefined;
 
 const sortCards = (cards: Card[]) => {
     cards.sort((a: Card, b: Card) => a.weight - b.weight);
 };
 
-export const checkIsOneValueCombo = (cards: Card[]) => {
+export const checkIsOneValueCombo = (cards: Card[]): CheckRankingResult => {
     const tempCards: Card[] = [...cards];
 
     sortCards(tempCards);
@@ -28,26 +31,38 @@ export const checkIsOneValueCombo = (cards: Card[]) => {
 
     if (chunkedArray.length === 1) {
         if (chunkedArray[0].length === 2 && typeof chunkedArray[0][0].rank === 'string') {
-            return Rankings.JACKS_OR_BETTER;
+            return {
+                name: Rankings.JACKS_OR_BETTER,
+                cards: chunkedArray[0],
+            };
         } else if (chunkedArray[0].length === 3) {
-            return Rankings.THREE_OF_A_KIND;
+            return {
+                name: Rankings.THREE_OF_A_KIND,
+                cards: chunkedArray[0],
+            };
         } else if (chunkedArray[0].length === 4) {
-            return Rankings.FOUR_OF_A_KIND;
+            return {
+                name: Rankings.FOUR_OF_A_KIND,
+                cards: chunkedArray[0],
+            };
         }
     } else if (chunkedArray.length === 2) {
         const pairs = chunkedArray.filter(el => el.length === 2);
 
         if (pairs.length === 2) {
-            return Rankings.TWO_PAIRS;
+            return {
+                name: Rankings.TWO_PAIRS,
+                cards: [...pairs[0], ...pairs[1]],
+            };
         } else if (pairs.length === 1) {
-            return Rankings.FULL_HOUSE;
+            return {
+                name: Rankings.FULL_HOUSE,
+            };
         }
     }
-
-    return false;
 };
 
-const checkIsConsecutive = (cards: Card[]) => {
+const checkIsConsecutive = (cards: Card[]): boolean => {
     let isConsecutive = true;
 
     for (let i = 0; i < cards.length - 1; i++) {
@@ -59,12 +74,14 @@ const checkIsConsecutive = (cards: Card[]) => {
     return isConsecutive;
 };
 
-const checkIsSameSuit = (cards: Card[]) => {
-    if (cards.every(card => card.suit.name === cards[0].suit.name)) return Rankings.FLUSH;
-    return false;
+const checkIsFlush = (cards: Card[]): CheckRankingResult => {
+    if (cards.every(card => card.suit.name === cards[0].suit.name))
+        return {
+            name: Rankings.FLUSH,
+        };
 };
 
-const checkIsStraightCombo = (cards: Card[], isFlush: boolean) => {
+const checkIsStraightCombo = (cards: Card[], isFlush: boolean): CheckRankingResult => {
     const tempCards: Card[] = [...cards];
 
     sortCards(tempCards);
@@ -88,32 +105,39 @@ const checkIsStraightCombo = (cards: Card[], isFlush: boolean) => {
 
     if (isStraight) {
         if (isFlush) {
-            if (tempCards[4].rank === RankNames.ACE) return Rankings.ROYAL_FLUSH;
-            else return Rankings.STRAIGHT_FLUSH;
-        } else return Rankings.STRAIGHT;
+            if (tempCards[4].rank === RankNames.ACE)
+                return {
+                    name: Rankings.ROYAL_FLUSH,
+                };
+            else
+                return {
+                    name: Rankings.STRAIGHT_FLUSH,
+                };
+        } else
+            return {
+                name: Rankings.STRAIGHT,
+            };
     }
-
-    return false;
 };
 
-export const checkRankings = (cards: Card[]) => {
-    if (cards.length !== 5) return null;
+export const checkRankings = (cards: Card[]): CheckRankingResult => {
+    if (cards.length !== 5) return;
 
-    const isFlush = checkIsSameSuit(cards);
+    const isFlush = checkIsFlush(cards);
 
     const isStraightCombo = checkIsStraightCombo(cards, !!isFlush);
 
     if (
         isStraightCombo &&
-        (isStraightCombo === Rankings.ROYAL_FLUSH || isStraightCombo === Rankings.STRAIGHT_FLUSH)
-    ) return isStraightCombo;
+        (isStraightCombo.name === Rankings.ROYAL_FLUSH ||
+            isStraightCombo.name === Rankings.STRAIGHT_FLUSH)
+    )
+        return isStraightCombo;
 
     const isOneValueCombo = checkIsOneValueCombo(cards);
 
-    if (isOneValueCombo && isOneValueCombo === Rankings.FOUR_OF_A_KIND) return isOneValueCombo;
+    if (isOneValueCombo && isOneValueCombo.name === Rankings.FOUR_OF_A_KIND) return isOneValueCombo;
     if (isFlush) return isFlush;
-    if (isStraightCombo && isStraightCombo === Rankings.STRAIGHT) return isStraightCombo;
+    if (isStraightCombo && isStraightCombo.name === Rankings.STRAIGHT) return isStraightCombo;
     if (isOneValueCombo) return isOneValueCombo;
-
-    return false;
 };

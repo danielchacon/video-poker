@@ -1,11 +1,12 @@
 import './card-list.scss';
 import { Card } from './card';
-import { Card as ICard } from '../types/Shared';
+import { Card as ICard, WinRanking } from '../types/Shared';
 
 interface Props {
     gameIsOn: boolean;
     cardList: ICard[];
     heldCards: ICard[];
+    winRanking: WinRanking | null;
     cardClickCallback: (card: ICard) => void;
 }
 
@@ -21,6 +22,12 @@ export const CardList = (props: Props) => {
                     </div>
                     <Card
                         card={card}
+                        isHighlighted={
+                            (props.winRanking &&
+                                props.winRanking.cards &&
+                                props.winRanking.cards.some(el => el.id === card.id)) ||
+                            false
+                        }
                         clickCallback={() => {
                             if (props.gameIsOn) props.cardClickCallback(card);
                         }}

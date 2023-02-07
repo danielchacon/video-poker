@@ -1,6 +1,6 @@
-import { Rankings } from '../types/Shared';
+import { Rankings, Multipliers } from '../types/Shared';
 
-export const multipliers = {
+export const multipliers: Multipliers = {
     [Rankings.JACKS_OR_BETTER]: [1, 2, 3, 4, 5],
     [Rankings.TWO_PAIRS]: [2, 4, 6, 8, 10],
     [Rankings.THREE_OF_A_KIND]: [3, 6, 9, 12, 15],
