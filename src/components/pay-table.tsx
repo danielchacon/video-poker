@@ -1,4 +1,6 @@
 import './pay-table.scss';
+import { multipliers } from '../constants/multipliers';
+import { Rankings } from '../types/Shared';
 
 interface Props {
     bet: number;
@@ -11,49 +13,40 @@ export const PayTable = (props: Props) => {
 
     const tableData = [
         {
-            name: 'royal-flush',
             title: 'Роял Флеш',
-            multipliers: [250, 500, 750, 1000, 4000],
+            multipliers: multipliers[Rankings.ROYAL_FLUSH],
         },
         {
-            name: 'straight-flush',
             title: 'Стрит Флеш',
-            multipliers: [50, 100, 150, 200, 250],
+            multipliers: multipliers[Rankings.STRAIGHT_FLUSH],
         },
         {
-            name: 'four-of-a-kind',
             title: 'Каре',
-            multipliers: [25, 50, 75, 100, 125],
+            multipliers: multipliers[Rankings.FOUR_OF_A_KIND],
         },
         {
-            name: 'full-house',
             title: 'Фул Хаус',
-            multipliers: [9, 18, 27, 36, 45],
+            multipliers: multipliers[Rankings.FULL_HOUSE],
         },
         {
-            name: 'flush',
             title: 'Флеш',
-            multipliers: [6, 12, 18, 24, 30],
+            multipliers: multipliers[Rankings.FLUSH],
         },
         {
-            name: 'Straight',
             title: 'Стрит',
-            multipliers: [4, 8, 12, 16, 20],
+            multipliers: multipliers[Rankings.STRAIGHT],
         },
         {
-            name: 'three-of-a-kind',
             title: 'Сет',
-            multipliers: [3, 6, 9, 12, 15],
+            multipliers: multipliers[Rankings.THREE_OF_A_KIND],
         },
         {
-            name: 'two-pairs',
             title: 'Две пары',
-            multipliers: [2, 4, 6, 8, 10],
+            multipliers: multipliers[Rankings.TWO_PAIRS],
         },
         {
-            name: 'jacks-or-better',
             title: 'Вальты и старше',
-            multipliers: [1, 2, 3, 4, 5],
+            multipliers: multipliers[Rankings.JACKS_OR_BETTER],
         },
     ];
 

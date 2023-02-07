@@ -51,7 +51,7 @@ function App() {
             }
         }
 
-        checkRankings(tempCardList);
+        const ranking = checkRankings(tempCardList);
 
         setDeck(tempDeck);
         setCardList(tempCardList);
@@ -60,7 +60,7 @@ function App() {
     };
 
     const handleCollect = () => {
-        checkRankings(cardList);
+        const ranking = checkRankings(cardList);
 
         setGameIsOn(false);
     };

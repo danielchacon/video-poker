@@ -34,10 +34,13 @@ export interface Card {
 }
 
 export enum Rankings {
-    STRAIGHT = 'Straight',
-    FOUR_OF_A_KIND = 'Four of a Kind',
-    FULL_HOUSE = 'Full House',
-    THREE_OF_A_KIND = 'Three of a Kind',
-    TWO_PAIRS = 'Two Pairs',
     JACKS_OR_BETTER = 'Jacks or Better',
+    TWO_PAIRS = 'Two Pairs',
+    THREE_OF_A_KIND = 'Three of a Kind',
+    FULL_HOUSE = 'Full House',
+    FOUR_OF_A_KIND = 'Four of a Kind',
+    STRAIGHT = 'Straight',
+    FLUSH = 'Flush',
+    STRAIGHT_FLUSH = 'Straight Flush',
+    ROYAL_FLUSH = 'Royal Flush',
 }

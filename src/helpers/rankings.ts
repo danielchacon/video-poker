@@ -1,17 +1,18 @@
 import { Card, RankNames, Rankings } from '../types/Shared';
-import { createCard, suitMap } from './deck';
 
 const sortCards = (cards: Card[]) => {
     cards.sort((a: Card, b: Card) => a.weight - b.weight);
 };
 
 export const checkIsOneValueCombo = (cards: Card[]) => {
-    sortCards(cards);
+    const tempCards: Card[] = [...cards];
+
+    sortCards(tempCards);
 
     let chunkedArray: Card[][] = [];
 
-    for (let i = 0; i < cards.length; i++) {
-        let currentElement = cards[i];
+    for (let i = 0; i < tempCards.length; i++) {
+        let currentElement = tempCards[i];
 
         if (
             chunkedArray.length === 0 ||
@@ -43,7 +44,7 @@ export const checkIsOneValueCombo = (cards: Card[]) => {
         }
     }
 
-    return null;
+    return false;
 };
 
 const checkIsConsecutive = (cards: Card[]) => {
@@ -58,46 +59,61 @@ const checkIsConsecutive = (cards: Card[]) => {
     return isConsecutive;
 };
 
-const checkIsStraightCombo = (cards: Card[]) => {
-    sortCards(cards);
+const checkIsSameSuit = (cards: Card[]) => {
+    if (cards.every(card => card.suit.name === cards[0].suit.name)) return Rankings.FLUSH;
+    return false;
+};
+
+const checkIsStraightCombo = (cards: Card[], isFlush: boolean) => {
+    const tempCards: Card[] = [...cards];
+
+    sortCards(tempCards);
 
     let isStraight = false;
 
     const hasAce = cards.some(el => el.rank === RankNames.ACE);
 
     if (hasAce) {
-        const tempCards: Card[] = JSON.parse(JSON.stringify(cards));
-        const aceCard = tempCards.find(el => el.rank === RankNames.ACE);
+        const tempCardsAceFirst: Card[] = JSON.parse(JSON.stringify(cards));
+        const aceCard = tempCardsAceFirst.find(el => el.rank === RankNames.ACE);
 
-        if (aceCard) aceCard.weight = 1;        
+        if (aceCard) aceCard.weight = 1;
 
-        sortCards(tempCards);        
+        sortCards(tempCardsAceFirst);
 
-        isStraight = checkIsConsecutive(tempCards);
+        isStraight = checkIsConsecutive(tempCardsAceFirst);
     }
 
-    if (!isStraight) isStraight = checkIsConsecutive(cards);
+    if (!isStraight) isStraight = checkIsConsecutive(tempCards);
 
-    console.log(cards, isStraight);
+    if (isStraight) {
+        if (isFlush) {
+            if (tempCards[4].rank === RankNames.ACE) return Rankings.ROYAL_FLUSH;
+            else return Rankings.STRAIGHT_FLUSH;
+        } else return Rankings.STRAIGHT;
+    }
 
-    if (isStraight) return Rankings.STRAIGHT;
+    return false;
 };
 
 export const checkRankings = (cards: Card[]) => {
     if (cards.length !== 5) return null;
 
+    const isFlush = checkIsSameSuit(cards);
+
+    const isStraightCombo = checkIsStraightCombo(cards, !!isFlush);
+
+    if (
+        isStraightCombo &&
+        (isStraightCombo === Rankings.ROYAL_FLUSH || isStraightCombo === Rankings.STRAIGHT_FLUSH)
+    ) return isStraightCombo;
+
     const isOneValueCombo = checkIsOneValueCombo(cards);
 
-    console.log('isOneValueCombo', isOneValueCombo);
+    if (isOneValueCombo && isOneValueCombo === Rankings.FOUR_OF_A_KIND) return isOneValueCombo;
+    if (isFlush) return isFlush;
+    if (isStraightCombo && isStraightCombo === Rankings.STRAIGHT) return isStraightCombo;
+    if (isOneValueCombo) return isOneValueCombo;
 
-    if (!isOneValueCombo)
-        checkIsStraightCombo([
-            createCard(RankNames.ACE, suitMap.clubs),
-            createCard(RankNames.JACK, suitMap.clubs),
-            createCard(RankNames.QUEEN, suitMap.clubs),
-            createCard(RankNames.KING, suitMap.clubs),
-            createCard(9, suitMap.clubs),
-        ]);
-
-    // console.log(isOneValueCombo);
+    return false;
 };
