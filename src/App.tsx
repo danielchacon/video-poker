@@ -1,73 +1,87 @@
-import { useEffect, useState } from 'react';
-
+import { observer } from 'mobx-react-lite';
 import { PayTable } from './components/pay-table';
 import { CardList } from './components/card-list';
 import { Tools } from './components/tools';
 import { UserBar } from './components/user-bar';
-
 import { getDeck, shuffleDeck } from './helpers/deck';
 import { checkRankings } from './helpers/rankings';
-
-import { Card, Rankings, WinRanking, Action } from './types/Shared';
-
+import { Card, Rankings } from './types/Shared';
 import { multipliers } from './constants/multipliers';
+import { gameStore } from './store/game';
 
-function App() {
-    const [balance, setBalance] = useState(100);
-    const [bet, setBet] = useState(1);
-    const [deck, setDeck] = useState<Card[]>([]);
-    const [cardList, setCardList] = useState<Card[]>([]);
-    const [heldCards, setHeldCards] = useState<Card[]>([]);
-    const [gameIsOn, setGameIsOn] = useState(false);
-    const [winRanking, setWinRanking] = useState<WinRanking | null>(null);
-    const [lastAction, setLastAction] = useState<Action | null>(null);
+const App = observer(() => {
+    const { balance, bet, heldCards, cardList, deck } = gameStore.state;
 
     const raiseBet = () => {
-        setBet(bet + 1 > 5 ? 1 : bet + 1);
+        gameStore.updateState({
+            ...gameStore.state,
+            bet: bet + 1 > 5 ? 1 : bet + 1,
+        });
     };
 
     const payTheWin = (ranking: Rankings) => {
-        const win = multipliers[ranking][bet - 1];
+        const win = multipliers[ranking][gameStore.state.bet - 1];
 
-        setBalance(balance + win);
-        setLastAction({
-            type: 'win',
-            text: `+${win}$`,
+        gameStore.updateState({
+            ...gameStore.state,
+            balance: balance + win,
+            lastAction: {
+                type: 'win',
+                text: `+${win}$`,
+            },
         });
     };
 
     const deal = () => {
-        setBalance(balance - bet);
-        setLastAction({
-            type: 'bet',
-            text: `-${bet}$`,
+        gameStore.updateState({
+            ...gameStore.state,
+            balance: balance - bet,
+            lastAction: {
+                type: 'bet',
+                text: `-${bet}$`,
+            },
         });
 
-        let deck = getDeck();
+        let tempDeck = getDeck();
 
-        shuffleDeck(deck);
+        shuffleDeck(tempDeck);
 
-        const initialCardList = deck.slice(0, 5);
-        deck = deck.slice(5, deck.length);
+        const tempCardList = tempDeck.slice(0, 5);
+        tempDeck = tempDeck.slice(5, tempDeck.length);
 
-        const ranking = checkRankings(initialCardList);
+        const ranking = checkRankings(tempCardList);
 
-        setWinRanking(ranking || null);
-        setDeck(deck);
-        setHeldCards([]);
-        setCardList(initialCardList);
-        setGameIsOn(true);
+        gameStore.updateState({
+            ...gameStore.state,
+            winRanking: ranking || null,
+            deck: tempDeck,
+            cardList: tempCardList,
+            heldCards: [],
+            gameIsOn: true,
+        });
     };
 
     const handleMaxBet = () => {
-        setBet(5);
+        gameStore.updateState({
+            ...gameStore.state,
+            bet: 5,
+        });
+
         deal();
     };
 
     const handleCardClick = (card: Card) => {
         if (heldCards.some(el => el.id === card.id)) {
-            setHeldCards(heldCards.filter(el => el.id !== card.id));
-        } else setHeldCards([...heldCards, card]);
+            gameStore.updateState({
+                ...gameStore.state,
+                heldCards: heldCards.filter(el => el.id !== card.id),
+            });
+        } else {
+            gameStore.updateState({
+                ...gameStore.state,
+                heldCards: [...heldCards, card],
+            });
+        }
     };
 
     const handleReplace = () => {
@@ -84,42 +98,37 @@ function App() {
 
         const ranking = checkRankings(tempCardList);
 
-        setWinRanking(ranking || null);
+        gameStore.updateState({
+            ...gameStore.state,
+            winRanking: ranking || null,
+        });
 
         if (ranking) payTheWin(ranking.name);
 
-        setDeck(tempDeck);
-        setCardList(tempCardList);        
-        setGameIsOn(false);
+        gameStore.updateState({
+            ...gameStore.state,
+            deck: tempDeck,
+            cardList: tempCardList,
+            gameIsOn: false,
+        });
     };
 
     return (
         <div>
-            <UserBar
-                balance={balance}
-                lastAction={lastAction}
-            />
+            <UserBar />
             <br></br>
             <PayTable
-                bet={bet}
-                gameIsOn={gameIsOn}
-                winRanking={winRanking}
-                columnClickCallback={bet => setBet(bet)}
+                columnClickCallback={bet => {
+                    gameStore.updateState({
+                        ...gameStore.state,
+                        bet,
+                    });
+                }}
             />
             <br></br>
-            <CardList
-                gameIsOn={gameIsOn}
-                cardList={cardList}
-                heldCards={heldCards}
-                winRanking={winRanking}
-                cardClickCallback={handleCardClick}
-            />
+            <CardList cardClickCallback={handleCardClick} />
             <br></br>
             <Tools
-                bet={bet}
-                gameIsOn={gameIsOn}
-                cardsHeld={heldCards.length > 0}
-                won={false}
                 raiseBetCallback={raiseBet}
                 maxBetCallback={handleMaxBet}
                 dealCallback={deal}
@@ -127,6 +136,6 @@ function App() {
             />
         </div>
     );
-}
+});
 
 export default App;

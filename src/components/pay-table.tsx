@@ -1,16 +1,15 @@
 import './pay-table.scss';
+import { observer } from 'mobx-react-lite';
 import { multipliers } from '../constants/multipliers';
-import { Rankings, WinRanking } from '../types/Shared';
+import { Rankings } from '../types/Shared';
+import { gameStore } from '../store/game';
 
 interface Props {
-    bet: number;
-    gameIsOn: boolean;
-    winRanking: WinRanking | null;
     columnClickCallback: (bet: number) => void;
 }
 
-export const PayTable = (props: Props) => {
-    const { bet, columnClickCallback } = props;
+export const PayTable = observer((props: Props) => {
+    const { winRanking, bet, gameIsOn } = gameStore.state;
 
     const tableData: { name: Rankings; title: string; multipliers: number[] }[] = [
         {
@@ -75,9 +74,7 @@ export const PayTable = (props: Props) => {
                     <tr key={rowIndex}>
                         <td
                             className={`${
-                                props.winRanking && props.winRanking.name === row.name
-                                    ? 'highlighted'
-                                    : ''
+                                winRanking && winRanking.name === row.name ? 'highlighted' : ''
                             }`}
                         >
                             {row.title}
@@ -86,12 +83,10 @@ export const PayTable = (props: Props) => {
                             <td
                                 key={`${rowIndex}${cellIndex}`}
                                 className={`cell ${bet - 1 === cellIndex ? 'selected' : ''} ${
-                                    props.winRanking && props.winRanking.name === row.name
-                                        ? 'highlighted'
-                                        : ''
+                                    winRanking && winRanking.name === row.name ? 'highlighted' : ''
                                 }`}
                                 onClick={() => {
-                                    if (!props.gameIsOn) columnClickCallback(cellIndex + 1);
+                                    if (!gameIsOn) props.columnClickCallback(cellIndex + 1);
                                 }}
                             >
                                 {cell}
@@ -102,4 +97,4 @@ export const PayTable = (props: Props) => {
             </tbody>
         </table>
     );
-};
+});

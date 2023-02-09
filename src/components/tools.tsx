@@ -1,16 +1,15 @@
+import { observer } from 'mobx-react-lite';
+import { gameStore } from '../store/game';
+
 interface Props {
-    bet: number;
-    gameIsOn: boolean;
-    cardsHeld: boolean;
-    won: boolean;
     raiseBetCallback: () => void;
     maxBetCallback: () => void;
     dealCallback: () => void;
     replaceCallback: () => void;
 }
 
-export const Tools = (props: Props) => {
-    const { bet, gameIsOn, won, raiseBetCallback, maxBetCallback } = props;
+export const Tools = observer((props: Props) => {
+    const { bet, gameIsOn, lastAction } = gameStore.state;
 
     const handleResultButtonClick = () => {
         if (gameIsOn) props.replaceCallback();
@@ -21,7 +20,7 @@ export const Tools = (props: Props) => {
         <div>
             <button
                 disabled={gameIsOn}
-                onClick={raiseBetCallback}
+                onClick={props.raiseBetCallback}
             >
                 Изменить ставку
             </button>
@@ -30,16 +29,16 @@ export const Tools = (props: Props) => {
             &nbsp;&nbsp;&nbsp;
             <button
                 disabled={gameIsOn}
-                onClick={maxBetCallback}
+                onClick={props.maxBetCallback}
             >
                 Максимальная ставка
             </button>
             &nbsp;&nbsp;&nbsp;
-            {won && <button>Удвоить</button>}
+            {lastAction?.type === 'win' && <button>Удвоить</button>}
             &nbsp;&nbsp;&nbsp;
             <button onClick={handleResultButtonClick}>
                 {gameIsOn ? 'Заменить карты' : 'Сдать'}
             </button>
         </div>
     );
-};
+});

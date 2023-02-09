@@ -1,16 +1,14 @@
 import './user-bar.scss';
-import { Action } from '../types/Shared';
+import { observer } from 'mobx-react-lite';
+import { gameStore } from '../store/game';
 
-interface Props {
-    balance: number;
-    lastAction: Action | null;
-}
+export const UserBar = observer(() => {
+    const { balance, lastAction } = gameStore.state;
 
-export const UserBar = (props: Props) => {
     return (
         <div className="user-bar">
-            <div>На счету: {props.balance}$</div>
-            <div>{props.lastAction?.text}</div>
+            <div>На счету: {balance}$</div>
+            <div>{lastAction?.text}</div>
         </div>
     );
-};
+});
