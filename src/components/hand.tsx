@@ -12,30 +12,37 @@ export const Hand = observer((props: Props) => {
     const { hand, heldCards, ranking, gameIsOn, isDoubleMode, comparedCard } = gameStore.state;
 
     return (
-        <div className="card-list">
-            {hand.map((card, index) => (
-                <div key={index}>
-                    <div>
-                        {heldCards.some(heldCard => heldCard.id === card.id) ? 'Фикс' : 'Не-фикс'}
+        <>
+            {gameIsOn && !isDoubleMode && (
+                <div>Отметьте карты, которые не хотите заменять</div>
+            )}
+            {gameIsOn && isDoubleMode && (
+                <div>Угадайте карту, которая будет старше открытой по достоинству</div>
+            )}
+            <div className="card-list">
+                {hand.map((card, index) => (
+                    <div key={index}>
+                        <div>
+                            {heldCards.some(heldCard => heldCard.id === card.id)
+                                ? 'Фикс'
+                                : 'Не-фикс'}
+                        </div>
+                        <Card
+                            hidden={isDoubleMode && index !== 0 && comparedCard?.id !== card.id}
+                            card={card}
+                            isHighlighted={
+                                (ranking &&
+                                    ranking.cards &&
+                                    ranking.cards.some(el => el.id === card.id)) ||
+                                false
+                            }
+                            clickCallback={() => {
+                                if (gameIsOn) props.cardClickCallback(card);
+                            }}
+                        />
                     </div>
-                    <Card
-                        hidden={
-                            isDoubleMode &&
-                            (index !== 0 && comparedCard?.id !== card.id)
-                        }
-                        card={card}
-                        isHighlighted={
-                            (ranking &&
-                                ranking.cards &&
-                                ranking.cards.some(el => el.id === card.id)) ||
-                            false
-                        }
-                        clickCallback={() => {
-                            if (gameIsOn) props.cardClickCallback(card);
-                        }}
-                    />
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        </>
     );
 });

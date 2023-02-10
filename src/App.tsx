@@ -109,6 +109,8 @@ const App = observer(() => {
         const filteredLog = log.filter(num => num > 0);
         const lastPay = filteredLog[filteredLog.length - 1];
 
+        
+
         if (comparedCard && comparedCard.weight > hand[0].weight) {
             gameStore.updateState({
                 balance: balance + lastPay,
@@ -188,7 +190,7 @@ const App = observer(() => {
             <Hand cardClickCallback={card => handleCardClick(card)} />
             <br></br>
             <Tools
-                raiseBetCallback={changeBetSize}
+                raiseBetCallback={() => changeBetSize(false)}
                 maxBetCallback={handleMaxBet}
                 dealCallback={deal}
                 replaceCallback={handleReplace}
