@@ -36,7 +36,7 @@ export const suitMap = {
     },
 };
 
-export const getDeck = (): Card[] => {
+export const createDeck = (): Card[] => {
     const suits: Suit[] = [suitMap.hearts, suitMap.clubs, suitMap.diamonds, suitMap.spades];
     const ranks: Rank[] = [
         RankNames.ACE,

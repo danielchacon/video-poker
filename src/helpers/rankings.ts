@@ -1,7 +1,7 @@
 import { Card, RankNames, Rankings } from '../types/Shared';
-import { WinRanking } from '../types/Shared';
+import { Ranking } from '../types/Shared';
 
-type CheckRankingResult = WinRanking | undefined;
+type CheckRankingResult = Ranking | undefined;
 
 const sortCards = (cards: Card[]) => {
     cards.sort((a: Card, b: Card) => a.weight - b.weight);

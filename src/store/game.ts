@@ -1,36 +1,54 @@
 import { makeAutoObservable } from 'mobx';
-import { Card, WinRanking, Action } from '../types/Shared';
-import { baseBet } from '../constants/baseBet';
+import { Card, Ranking } from '../types/Shared';
+import { baseBet, baseBalance } from '../constants/settings';
 
 interface State {
     bet: number;
     balance: number;
-    deck: Card[];
-    cardList: Card[];
-    heldCards: Card[];
     gameIsOn: boolean;
-    winRanking: WinRanking | null;
-    lastAction: Action | null;
+    isDoubleMode: boolean;
+    comparedCard: Card | null;
+    deck: Card[];
+    hand: Card[];
+    heldCards: Card[];
+    ranking: Ranking | null;
+    log: number[];
 }
 
+const statePlaceholder: State = {
+    bet: baseBet,
+    balance: baseBalance,
+    gameIsOn: false,
+    isDoubleMode: false,
+    comparedCard: null,
+    deck: [],
+    hand: [],
+    heldCards: [],
+    ranking: null,
+    log: [],
+};
+
 class GameStore {
-    state: State = {
-        bet: baseBet,
-        balance: 100,
-        deck: [],
-        cardList: [],
-        heldCards: [],
-        gameIsOn: false,
-        winRanking: null,
-        lastAction: null,
-    };
+    state: State = statePlaceholder;
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    updateState(payload: State) {
-        this.state = payload;
+    updateState(payload: Partial<State>) {
+        this.state = {
+            ...this.state,
+            ...payload,
+        };
+    }
+
+    reset() {
+        this.updateState({
+            ...statePlaceholder,
+            bet: this.state.bet,
+            balance: this.state.balance,
+            log: this.state.log
+        })
     }
 }
 export const gameStore = new GameStore();

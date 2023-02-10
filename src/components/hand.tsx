@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import './card-list.scss';
+import './hand.scss';
 import { Card } from './card';
 import { Card as ICard } from '../types/Shared';
 import { gameStore } from '../store/game';
@@ -8,22 +8,26 @@ interface Props {
     cardClickCallback: (card: ICard) => void;
 }
 
-export const CardList = observer((props: Props) => {
-    const { cardList, heldCards, winRanking, gameIsOn } = gameStore.state;
+export const Hand = observer((props: Props) => {
+    const { hand, heldCards, ranking, gameIsOn, isDoubleMode, comparedCard } = gameStore.state;
 
     return (
         <div className="card-list">
-            {cardList.map((card, index) => (
+            {hand.map((card, index) => (
                 <div key={index}>
                     <div>
                         {heldCards.some(heldCard => heldCard.id === card.id) ? 'Фикс' : 'Не-фикс'}
                     </div>
                     <Card
+                        hidden={
+                            isDoubleMode &&
+                            (index !== 0 && comparedCard?.id !== card.id)
+                        }
                         card={card}
                         isHighlighted={
-                            (winRanking &&
-                                winRanking.cards &&
-                                winRanking.cards.some(el => el.id === card.id)) ||
+                            (ranking &&
+                                ranking.cards &&
+                                ranking.cards.some(el => el.id === card.id)) ||
                             false
                         }
                         clickCallback={() => {

@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const PayTable = observer((props: Props) => {
-    const { winRanking, bet, gameIsOn } = gameStore.state;
+    const { ranking, bet, gameIsOn } = gameStore.state;
 
     const tableData: { name: Rankings; title: string; multipliers: number[] }[] = [
         {
@@ -65,7 +65,7 @@ export const PayTable = observer((props: Props) => {
                 <tr>
                     <th>Комбинация</th>
                     <th colSpan={5}>
-                        Множитель выигрыша (<i>n</i>$)
+                        Выигрыш ($)
                     </th>
                 </tr>
             </thead>
@@ -74,7 +74,7 @@ export const PayTable = observer((props: Props) => {
                     <tr key={rowIndex}>
                         <td
                             className={`${
-                                winRanking && winRanking.name === row.name ? 'highlighted' : ''
+                                ranking && ranking.name === row.name ? 'highlighted' : ''
                             }`}
                         >
                             {row.title}
@@ -83,7 +83,7 @@ export const PayTable = observer((props: Props) => {
                             <td
                                 key={`${rowIndex}${cellIndex}`}
                                 className={`cell ${bet - 1 === cellIndex ? 'selected' : ''} ${
-                                    winRanking && winRanking.name === row.name ? 'highlighted' : ''
+                                    ranking && ranking.name === row.name ? 'highlighted' : ''
                                 }`}
                                 onClick={() => {
                                     if (!gameIsOn) props.columnClickCallback(cellIndex + 1);

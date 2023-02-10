@@ -45,7 +45,7 @@ export enum Rankings {
     ROYAL_FLUSH = 'Royal Flush',
 }
 
-export interface WinRanking {
+export interface Ranking {
     name: Rankings;
     cards?: Card[];
 }

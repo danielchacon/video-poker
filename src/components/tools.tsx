@@ -6,10 +6,11 @@ interface Props {
     maxBetCallback: () => void;
     dealCallback: () => void;
     replaceCallback: () => void;
+    doubleCallback: () => void;
 }
 
 export const Tools = observer((props: Props) => {
-    const { bet, gameIsOn, lastAction } = gameStore.state;
+    const { bet, gameIsOn, ranking, isDoubleMode } = gameStore.state;
 
     const handleResultButtonClick = () => {
         if (gameIsOn) props.replaceCallback();
@@ -34,10 +35,15 @@ export const Tools = observer((props: Props) => {
                 Максимальная ставка
             </button>
             &nbsp;&nbsp;&nbsp;
-            {lastAction?.type === 'win' && <button>Удвоить</button>}
+            <button
+                disabled={!(ranking !== null && gameIsOn === false)}
+                onClick={props.doubleCallback}
+            >
+                Удвоить
+            </button>
             &nbsp;&nbsp;&nbsp;
-            <button onClick={handleResultButtonClick}>
-                {gameIsOn ? 'Заменить карты' : 'Сдать'}
+            <button disabled={gameIsOn && isDoubleMode} onClick={handleResultButtonClick}>
+                {gameIsOn && !isDoubleMode ? 'Заменить карты' : 'Сдать'}
             </button>
         </div>
     );

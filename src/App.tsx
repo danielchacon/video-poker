@@ -1,117 +1,177 @@
+import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { PayTable } from './components/pay-table';
-import { CardList } from './components/card-list';
+import { Hand } from './components/hand';
 import { Tools } from './components/tools';
 import { UserBar } from './components/user-bar';
-import { getDeck, shuffleDeck } from './helpers/deck';
+import { createDeck, shuffleDeck } from './helpers/deck';
 import { checkRankings } from './helpers/rankings';
-import { Card, Rankings } from './types/Shared';
+import { Card } from './types/Shared';
 import { multipliers } from './constants/multipliers';
 import { gameStore } from './store/game';
 
 const App = observer(() => {
-    const { balance, bet, heldCards, cardList, deck } = gameStore.state;
+    const changeBetSize = (max: boolean = false) => {
+        const { bet } = gameStore.state;
 
-    const raiseBet = () => {
         gameStore.updateState({
-            ...gameStore.state,
-            bet: bet + 1 > 5 ? 1 : bet + 1,
+            bet: max ? 5 : bet + 1 > 5 ? 1 : bet + 1,
         });
     };
 
-    const payTheWin = (ranking: Rankings) => {
-        const win = multipliers[ranking][gameStore.state.bet - 1];
+    const makeBet = () => {
+        const { balance, bet, log } = gameStore.state;
 
         gameStore.updateState({
-            ...gameStore.state,
-            balance: balance + win,
-            lastAction: {
-                type: 'win',
-                text: `+${win}$`,
-            },
-        });
-    };
-
-    const deal = () => {
-        gameStore.updateState({
-            ...gameStore.state,
             balance: balance - bet,
-            lastAction: {
-                type: 'bet',
-                text: `-${bet}$`,
-            },
-        });
-
-        let tempDeck = getDeck();
-
-        shuffleDeck(tempDeck);
-
-        const tempCardList = tempDeck.slice(0, 5);
-        tempDeck = tempDeck.slice(5, tempDeck.length);
-
-        const ranking = checkRankings(tempCardList);
-
-        gameStore.updateState({
-            ...gameStore.state,
-            winRanking: ranking || null,
-            deck: tempDeck,
-            cardList: tempCardList,
-            heldCards: [],
-            gameIsOn: true,
+            log: [...log, -1],
         });
     };
 
-    const handleMaxBet = () => {
-        gameStore.updateState({
-            ...gameStore.state,
-            bet: 5,
-        });
+    const setTableCards = () => {
+        let deck = createDeck();
 
-        deal();
+        shuffleDeck(deck);
+
+        const hand = deck.slice(0, 5);
+        deck = deck.slice(5, deck.length);
+
+        gameStore.updateState({
+            deck,
+            hand,
+        });
     };
 
-    const handleCardClick = (card: Card) => {
+    const holdCard = (card: Card) => {
+        const { heldCards } = gameStore.state;
+
         if (heldCards.some(el => el.id === card.id)) {
             gameStore.updateState({
-                ...gameStore.state,
                 heldCards: heldCards.filter(el => el.id !== card.id),
             });
         } else {
             gameStore.updateState({
-                ...gameStore.state,
                 heldCards: [...heldCards, card],
             });
         }
     };
 
-    const handleReplace = () => {
-        const tempCardList: Card[] = [...cardList];
-        let tempDeck: Card[] = [...deck];
+    const replaceCards = () => {
+        const { heldCards, hand, deck } = gameStore.state;
 
-        for (let i = 0; i < tempCardList.length; i++) {
-            if (!heldCards.some(heldCard => heldCard.id === tempCardList[i].id)) {
-                tempCardList[i] = tempDeck[0];
+        const handClone: Card[] = [...hand];
+        let deckClone: Card[] = [...deck];
 
-                tempDeck = tempDeck.slice(1, deck.length);
+        for (let i = 0; i < handClone.length; i++) {
+            if (!heldCards.some(heldCard => heldCard.id === handClone[i].id)) {
+                handClone[i] = deckClone[0];
+
+                deckClone = deckClone.slice(1, deck.length);
             }
         }
 
-        const ranking = checkRankings(tempCardList);
+        gameStore.updateState({
+            deck: deckClone,
+            hand: handClone,
+        });
+    };
+
+    const checkIsWin = () => {
+        const { hand } = gameStore.state;
+
+        const ranking = checkRankings(hand);
 
         gameStore.updateState({
-            ...gameStore.state,
-            winRanking: ranking || null,
+            ranking: ranking || null,
+        });
+    };
+
+    const payTheWin = () => {
+        const { balance, ranking, log } = gameStore.state;
+
+        if (!ranking) return;
+
+        const pay = multipliers[ranking.name][gameStore.state.bet - 1];
+
+        gameStore.updateState({
+            balance: balance + pay,
+            log: [...log, pay],
+        });
+    };
+
+    const compareCards = (card: Card) => {
+        gameStore.updateState({
+            comparedCard: card,
         });
 
-        if (ranking) payTheWin(ranking.name);
+        const { hand, comparedCard, balance, log } = gameStore.state;
+
+        const filteredLog = log.filter(num => num > 0);
+        const lastPay = filteredLog[filteredLog.length - 1];
+
+        if (comparedCard && comparedCard.weight > hand[0].weight) {
+            gameStore.updateState({
+                balance: balance + lastPay,
+                log: [...log, lastPay],
+            });
+        } else {
+            gameStore.updateState({
+                balance: balance - lastPay,
+                log: [...log, -lastPay],
+            });
+        }
 
         gameStore.updateState({
-            ...gameStore.state,
-            deck: tempDeck,
-            cardList: tempCardList,
             gameIsOn: false,
         });
     };
+
+    const deal = () => {
+        gameStore.reset();
+        makeBet();
+        setTableCards();
+        checkIsWin();
+
+        gameStore.updateState({
+            gameIsOn: true,
+        });
+    };
+
+    const handleMaxBet = () => {
+        changeBetSize(true);
+        deal();
+    };
+
+    const handleReplace = () => {
+        replaceCards();
+        checkIsWin();
+        payTheWin();
+
+        gameStore.updateState({
+            gameIsOn: false,
+        });
+    };
+
+    const handleCardClick = (card: Card) => {
+        const { isDoubleMode } = gameStore.state;
+
+        if (isDoubleMode) compareCards(card);
+        else holdCard(card);
+    };
+
+    const handleDouble = () => {
+        gameStore.reset();
+        gameStore.updateState({
+            gameIsOn: true,
+            isDoubleMode: true,
+        });
+
+        setTableCards();
+    };
+
+    useEffect(() => {
+        console.log(JSON.parse(JSON.stringify(gameStore.state)));
+    }, [gameStore.state]);
 
     return (
         <div>
@@ -120,19 +180,19 @@ const App = observer(() => {
             <PayTable
                 columnClickCallback={bet => {
                     gameStore.updateState({
-                        ...gameStore.state,
                         bet,
                     });
                 }}
             />
             <br></br>
-            <CardList cardClickCallback={handleCardClick} />
+            <Hand cardClickCallback={card => handleCardClick(card)} />
             <br></br>
             <Tools
-                raiseBetCallback={raiseBet}
+                raiseBetCallback={changeBetSize}
                 maxBetCallback={handleMaxBet}
                 dealCallback={deal}
                 replaceCallback={handleReplace}
+                doubleCallback={handleDouble}
             />
         </div>
     );
