@@ -1,3 +1,4 @@
+import './App.scss';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { PayTable } from './components/pay-table';
@@ -109,8 +110,6 @@ const App = observer(() => {
         const filteredLog = log.filter(num => num > 0);
         const lastPay = filteredLog[filteredLog.length - 1];
 
-        
-
         if (comparedCard && comparedCard.weight > hand[0].weight) {
             gameStore.updateState({
                 balance: balance + lastPay,
@@ -171,31 +170,32 @@ const App = observer(() => {
         setTableCards();
     };
 
-    useEffect(() => {
-        console.log(JSON.parse(JSON.stringify(gameStore.state)));
-    }, [gameStore.state]);
-
     return (
-        <div>
-            <UserBar />
-            <br></br>
-            <PayTable
-                columnClickCallback={bet => {
-                    gameStore.updateState({
-                        bet,
-                    });
-                }}
-            />
-            <br></br>
-            <Hand cardClickCallback={card => handleCardClick(card)} />
-            <br></br>
-            <Tools
-                raiseBetCallback={() => changeBetSize(false)}
-                maxBetCallback={handleMaxBet}
-                dealCallback={deal}
-                replaceCallback={handleReplace}
-                doubleCallback={handleDouble}
-            />
+        <div className="app">
+            <div className="app__inner">
+                <PayTable
+                    columnClickCallback={bet => {
+                        gameStore.updateState({
+                            bet,
+                        });
+                    }}
+                />
+                <div className="app__hand-wrapper">
+                    {gameStore.state.hand.length ? (
+                        <Hand cardClickCallback={card => handleCardClick(card)} />
+                    ) : (
+                        <div className="app__hand-placeholder">VIDEO POKER</div>
+                    )}
+                </div>
+                <UserBar />
+                <Tools
+                    raiseBetCallback={() => changeBetSize(false)}
+                    maxBetCallback={handleMaxBet}
+                    dealCallback={deal}
+                    replaceCallback={handleReplace}
+                    doubleCallback={handleDouble}
+                />
+            </div>
         </div>
     );
 });

@@ -1,0 +1,31 @@
+@import '../assets/styles/variables';
+.button {
+    border: 0;
+    padding: 1em;
+    background-color: $color-5;
+    color: $color-6;
+    box-shadow: 0 8px 9px -5px #0003, 0 15px 22px 2px #00000024, 0 6px 28px 5px #0000001f;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 0.5em;
+    font-size: $base-font-size;
+    font-weight: bold;
+    text-transform: uppercase;
+    &--theme-primary {
+        background-color: $color-3;
+    }
+    &--theme-alert {
+        background-color: $color-4;
+        color: $color-5;
+    }
+    &[disabled] {
+        background-color: $color-5;
+        color: $color-9;
+        cursor: default;
+    }
+    &[disabled]#{&}--round {
+        svg {
+            color: $color-9;
+        }
+    }
+}

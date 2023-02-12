@@ -1,6 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import './hand.scss';
 import { Card } from './card';
+import { Button } from './button';
+import { IconLock } from './icon-lock';
+import { IconUnlock } from './icon-unlock';
 import { Card as ICard } from '../types/Shared';
 import { gameStore } from '../store/game';
 
@@ -13,35 +16,44 @@ export const Hand = observer((props: Props) => {
 
     return (
         <>
-            {gameIsOn && !isDoubleMode && (
-                <div>Отметьте карты, которые не хотите заменять</div>
-            )}
-            {gameIsOn && isDoubleMode && (
-                <div>Угадайте карту, которая будет старше открытой по достоинству</div>
-            )}
-            <div className="card-list">
-                {hand.map((card, index) => (
-                    <div key={index}>
-                        <div>
-                            {heldCards.some(heldCard => heldCard.id === card.id)
-                                ? 'Фикс'
-                                : 'Не-фикс'}
+            <div className="hand">
+                {hand.map((card, index) => {
+                    const pressed = heldCards.some(heldCard => heldCard.id === card.id);
+                    const disabled = !gameIsOn || (isDoubleMode && index === 0);
+
+                    return (
+                        <div
+                            className="hand__item"
+                            key={index}
+                        >
+                            <div className="hand__top">
+                                <div
+                                    className={`hand__status hand__status--${
+                                        pressed ? 'lock' : 'unlock'
+                                    }`}
+                                >
+                                {pressed ? <IconLock /> : <IconUnlock />}
+                                </div>
+                            </div>
+                            <Card
+                                hidden={isDoubleMode && index !== 0 && comparedCard?.id !== card.id}
+                                card={card}
+                                isHighlighted={
+                                    (ranking &&
+                                        ranking.cards &&
+                                        ranking.cards.some(el => el.id === card.id)) ||
+                                    false
+                                }
+                                disabled={disabled}
+                                pressed={pressed}
+                                clickable={!disabled}
+                                onClickCallback={() => {
+                                    if (gameIsOn) props.cardClickCallback(card);
+                                }}
+                            />
                         </div>
-                        <Card
-                            hidden={isDoubleMode && index !== 0 && comparedCard?.id !== card.id}
-                            card={card}
-                            isHighlighted={
-                                (ranking &&
-                                    ranking.cards &&
-                                    ranking.cards.some(el => el.id === card.id)) ||
-                                false
-                            }
-                            clickCallback={() => {
-                                if (gameIsOn) props.cardClickCallback(card);
-                            }}
-                        />
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </>
     );

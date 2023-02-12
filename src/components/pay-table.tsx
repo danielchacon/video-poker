@@ -54,27 +54,19 @@ export const PayTable = observer((props: Props) => {
         },
         {
             name: Rankings.JACKS_OR_BETTER,
-            title: 'Вальты и старше',
+            title: 'Валеты и старше',
             multipliers: multipliers[Rankings.JACKS_OR_BETTER],
         },
     ];
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Комбинация</th>
-                    <th colSpan={5}>
-                        Выигрыш ($)
-                    </th>
-                </tr>
-            </thead>
+        <table className='pay-table'>
             <tbody>
                 {tableData.map((row, rowIndex) => (
                     <tr key={rowIndex}>
                         <td
-                            className={`${
-                                ranking && ranking.name === row.name ? 'highlighted' : ''
+                            className={`pay-table__cell pay-table__cell--name ${
+                                ranking && ranking.name === row.name ? 'pay-table__cell--highlighted' : ''
                             }`}
                         >
                             {row.title}
@@ -82,8 +74,8 @@ export const PayTable = observer((props: Props) => {
                         {row.multipliers.map((cell, cellIndex) => (
                             <td
                                 key={`${rowIndex}${cellIndex}`}
-                                className={`cell ${bet - 1 === cellIndex ? 'selected' : ''} ${
-                                    ranking && ranking.name === row.name ? 'highlighted' : ''
+                                className={`pay-table__cell pay-table__cell--pay ${bet - 1 === cellIndex ? 'pay-table__cell--selected' : ''} ${
+                                    ranking && ranking.name === row.name ? 'pay-table__cell--highlighted' : ''
                                 }`}
                                 onClick={() => {
                                     if (!gameIsOn) props.columnClickCallback(cellIndex + 1);

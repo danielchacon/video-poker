@@ -1,0 +1,14 @@
+@import '../assets/styles/variables';
+.tools {
+    display: grid;
+    grid-template-columns: repeat(4, auto) 150px;
+    align-items: center;
+    gap: 5px;
+
+    &__bet {
+        color: $color-5;
+        text-align: center;
+        font-size: $base-font-size * 1.5;
+        font-weight: bold;
+    }
+}

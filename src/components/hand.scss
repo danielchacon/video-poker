@@ -1,7 +1,27 @@
-.card-list {
-    display: flex;
-
-    > * {
-        margin: 0 10px;
+@import '../assets/styles/variables';
+.hand {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    &__item {
+        display: grid;
+        gap: 10px;
+    }
+    &__top {
+        display: flex;
+        justify-content: center;
+        line-height: 0;
+    }
+    &__status {
+        &--lock {
+            color: $color-3;
+        }
+        &--unlock {
+            color: rgba($color-5, 0.3);
+        }
+        svg {
+            width: 30px;
+            height: auto;            
+        }
     }
 }

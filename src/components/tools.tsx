@@ -1,4 +1,6 @@
+import './tools.scss';
 import { observer } from 'mobx-react-lite';
+import { Button } from './button';
 import { gameStore } from '../store/game';
 
 interface Props {
@@ -18,33 +20,42 @@ export const Tools = observer((props: Props) => {
     };
 
     return (
-        <div>
-            <button
-                disabled={gameIsOn}
-                onClick={props.raiseBetCallback}
-            >
-                Изменить ставку
-            </button>
-            &nbsp;&nbsp;&nbsp;
-            <span>{bet}$</span>
-            &nbsp;&nbsp;&nbsp;
-            <button
-                disabled={gameIsOn}
-                onClick={props.maxBetCallback}
-            >
-                Максимальная ставка
-            </button>
-            &nbsp;&nbsp;&nbsp;
-            <button
-                disabled={!(ranking !== null && gameIsOn === false)}
-                onClick={props.doubleCallback}
-            >
-                Удвоить
-            </button>
-            &nbsp;&nbsp;&nbsp;
-            <button disabled={gameIsOn && isDoubleMode} onClick={handleResultButtonClick}>
-                {gameIsOn && !isDoubleMode ? 'Заменить карты' : 'Сдать'}
-            </button>
+        <div className="tools">
+            <div>
+                <Button
+                    disabled={gameIsOn}
+                    onClickCallback={props.raiseBetCallback}
+                >
+                    Ставка
+                </Button>
+            </div>
+            <div className="tools__bet">{bet}$</div>
+            <div>
+                <Button
+                    theme="alert"
+                    disabled={gameIsOn}
+                    onClickCallback={props.maxBetCallback}
+                >
+                    Макс.
+                </Button>
+            </div>
+            <div>
+                <Button
+                    disabled={!(ranking !== null && gameIsOn === false)}
+                    onClickCallback={props.doubleCallback}
+                >
+                    Удвоить
+                </Button>
+            </div>
+            <div>
+                <Button
+                    theme="primary"
+                    disabled={gameIsOn && isDoubleMode}
+                    onClickCallback={handleResultButtonClick}
+                >
+                    {gameIsOn && !isDoubleMode ? 'Заменить' : 'Сдать'}
+                </Button>
+            </div>
         </div>
     );
 });

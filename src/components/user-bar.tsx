@@ -3,14 +3,11 @@ import { observer } from 'mobx-react-lite';
 import { gameStore } from '../store/game';
 
 export const UserBar = observer(() => {
-    const { balance, log } = gameStore.state;
-
-    const lastAction = log[log.length - 1];
+    const { balance } = gameStore.state;
 
     return (
         <div className="user-bar">
-            <div>На счету: {balance}$</div>
-            {lastAction && (<div>{lastAction > 0 ? '+' + lastAction : lastAction}$</div>)}
+            {balance}$
         </div>
     );
 });
