@@ -13,10 +13,12 @@ interface Props {
 
 export const Tools = observer((props: Props) => {
     const { bet, gameIsOn, ranking, isDoubleMode } = gameStore.state;
+    const { raiseBetCallback, maxBetCallback, dealCallback, replaceCallback, doubleCallback } =
+        props;
 
     const handleResultButtonClick = () => {
-        if (gameIsOn) props.replaceCallback();
-        else props.dealCallback();
+        if (gameIsOn) replaceCallback();
+        else dealCallback();
     };
 
     return (
@@ -24,7 +26,7 @@ export const Tools = observer((props: Props) => {
             <div className="tools__item">
                 <Button
                     disabled={gameIsOn}
-                    onClickCallback={props.raiseBetCallback}
+                    onClickCallback={raiseBetCallback}
                 >
                     Ставка
                 </Button>
@@ -36,7 +38,7 @@ export const Tools = observer((props: Props) => {
                 <Button
                     theme="alert"
                     disabled={gameIsOn}
-                    onClickCallback={props.maxBetCallback}
+                    onClickCallback={maxBetCallback}
                 >
                     Макс.
                 </Button>
@@ -44,7 +46,7 @@ export const Tools = observer((props: Props) => {
             <div className="tools__item">
                 <Button
                     disabled={!(ranking !== null && gameIsOn === false)}
-                    onClickCallback={props.doubleCallback}
+                    onClickCallback={doubleCallback}
                 >
                     Удвоить
                 </Button>

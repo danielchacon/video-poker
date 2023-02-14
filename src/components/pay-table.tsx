@@ -10,6 +10,7 @@ interface Props {
 
 export const PayTable = observer((props: Props) => {
     const { ranking, bet, gameIsOn } = gameStore.state;
+    const { columnClickCallback } = props;
 
     const tableData: { name: Rankings; title: string; multipliers: number[] }[] = [
         {
@@ -64,8 +65,12 @@ export const PayTable = observer((props: Props) => {
             <tbody>
                 {tableData.map((row, rowIndex) => (
                     <>
-                        <tr className='pay-table__row pay-table__row--mobile' key={rowIndex}>
-                            <td colSpan={5}
+                        <tr
+                            className="pay-table__row pay-table__row--mobile"
+                            key={rowIndex}
+                        >
+                            <td
+                                colSpan={5}
                                 className={`pay-table__cell pay-table__cell--name ${
                                     ranking && ranking.name === row.name
                                         ? 'pay-table__cell--highlighted'
@@ -75,7 +80,10 @@ export const PayTable = observer((props: Props) => {
                                 {row.title}
                             </td>
                         </tr>
-                        <tr className='pay-table__row' key={rowIndex}>
+                        <tr
+                            className="pay-table__row"
+                            key={rowIndex}
+                        >
                             <td
                                 className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
                                     ranking && ranking.name === row.name
@@ -96,7 +104,7 @@ export const PayTable = observer((props: Props) => {
                                             : ''
                                     }`}
                                     onClick={() => {
-                                        if (!gameIsOn) props.columnClickCallback(cellIndex + 1);
+                                        if (!gameIsOn) columnClickCallback(cellIndex + 1);
                                     }}
                                 >
                                     {cell}
