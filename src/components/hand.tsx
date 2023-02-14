@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import './hand.scss';
 import { Card } from './card';
-import { Button } from './button';
 import { IconLock } from './icon-lock';
 import { IconUnlock } from './icon-unlock';
 import { Card as ICard } from '../types/Shared';
@@ -32,7 +31,7 @@ export const Hand = observer((props: Props) => {
                                         pressed ? 'lock' : 'unlock'
                                     }`}
                                 >
-                                {pressed ? <IconLock /> : <IconUnlock />}
+                                    {pressed ? <IconLock /> : <IconUnlock />}
                                 </div>
                             </div>
                             <Card

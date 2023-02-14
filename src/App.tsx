@@ -1,5 +1,4 @@
 import './App.scss';
-import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { PayTable } from './components/pay-table';
 import { Hand } from './components/hand';
@@ -124,7 +123,7 @@ const App = observer(() => {
 
         gameStore.updateState({
             gameIsOn: false,
-            ranking: null
+            ranking: null,
         });
     };
 
