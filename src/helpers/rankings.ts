@@ -1,5 +1,4 @@
-import { Card, RankNames, Rankings } from '../types/Shared';
-import { Ranking } from '../types/Shared';
+import { Card, RankNames, Rankings, Ranking } from '../types/Shared';
 
 type CheckRankingResult = Ranking | undefined;
 
