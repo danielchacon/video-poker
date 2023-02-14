@@ -16,7 +16,9 @@ export const Card = (props: Props) => {
         <div
             className={`card ${props.isHighlighted ? 'card--highlighted' : ''} ${
                 props.disabled ? 'card--disabled' : ''
-            } ${props.pressed ? 'card--pressed' : ''} ${props.clickable ? 'card--clickable' : ''} ${props.hidden ? 'card--hidden' : ''}`}
+            } ${props.pressed ? 'card--pressed' : ''} ${props.clickable ? 'card--clickable' : ''} ${
+                props.hidden ? 'card--hidden' : ''
+            }`}
             onClick={props.onClickCallback}
             role="button"
             tabIndex={0}
@@ -33,7 +35,9 @@ export const Card = (props: Props) => {
                     '?'
                 ) : (
                     <>
-                        {props.card.rank.toString().charAt(0)}
+                        {+props.card.rank > 0
+                            ? props.card.rank
+                            : props.card.rank.toString().charAt(0)}
                         {props.card.suit.symbol}
                     </>
                 )}
