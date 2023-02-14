@@ -124,6 +124,7 @@ const App = observer(() => {
 
         gameStore.updateState({
             gameIsOn: false,
+            ranking: null
         });
     };
 
@@ -161,10 +162,10 @@ const App = observer(() => {
     };
 
     const handleDouble = () => {
-        gameStore.reset();
         gameStore.updateState({
             gameIsOn: true,
             isDoubleMode: true,
+            heldCards: [],
         });
 
         setTableCards();
