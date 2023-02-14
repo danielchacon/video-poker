@@ -23,7 +23,7 @@ export const Hand = observer((props: Props) => {
                     return (
                         <div
                             className="hand__item"
-                            key={index}
+                            key={`hand-${index}`}
                         >
                             <div className="hand__top">
                                 <div

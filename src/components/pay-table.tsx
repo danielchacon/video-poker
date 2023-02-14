@@ -64,54 +64,54 @@ export const PayTable = observer((props: Props) => {
         <table className="pay-table">
             <tbody>
                 {tableData.map((row, rowIndex) => (
-                    <>
-                        <tr
-                            className="pay-table__row pay-table__row--mobile"
-                            key={rowIndex}
+                    <tr
+                        className="pay-table__row pay-table__row--mobile"
+                        key={`mobile-row-${rowIndex}`}
+                    >
+                        <td
+                            colSpan={5}
+                            className={`pay-table__cell pay-table__cell--name ${
+                                ranking &&
+                                ranking.name === row.name &&
+                                'pay-table__cell--highlighted'
+                            }`}
                         >
+                            {row.title}
+                        </td>
+                    </tr>
+                ))}
+                {tableData.map((row, rowIndex) => (
+                    <tr
+                        className="pay-table__row"
+                        key={`row-${rowIndex}`}
+                    >
+                        <td
+                            className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
+                                ranking &&
+                                ranking.name === row.name &&
+                                'pay-table__cell--highlighted'
+                            }`}
+                        >
+                            {row.title}
+                        </td>
+                        {row.multipliers.map((cell, cellIndex) => (
                             <td
-                                colSpan={5}
-                                className={`pay-table__cell pay-table__cell--name ${
+                                key={`${rowIndex}${cellIndex}`}
+                                className={`pay-table__cell pay-table__cell--pay ${
+                                    bet - 1 === cellIndex && 'pay-table__cell--selected'
+                                } ${
                                     ranking &&
                                     ranking.name === row.name &&
                                     'pay-table__cell--highlighted'
                                 }`}
+                                onClick={() => {
+                                    if (!gameIsOn) columnClickCallback(cellIndex + 1);
+                                }}
                             >
-                                {row.title}
+                                {cell}
                             </td>
-                        </tr>
-                        <tr
-                            className="pay-table__row"
-                            key={rowIndex}
-                        >
-                            <td
-                                className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
-                                    ranking &&
-                                    ranking.name === row.name &&
-                                    'pay-table__cell--highlighted'
-                                }`}
-                            >
-                                {row.title}
-                            </td>
-                            {row.multipliers.map((cell, cellIndex) => (
-                                <td
-                                    key={`${rowIndex}${cellIndex}`}
-                                    className={`pay-table__cell pay-table__cell--pay ${
-                                        bet - 1 === cellIndex && 'pay-table__cell--selected'
-                                    } ${
-                                        ranking &&
-                                        ranking.name === row.name &&
-                                        'pay-table__cell--highlighted'
-                                    }`}
-                                    onClick={() => {
-                                        if (!gameIsOn) columnClickCallback(cellIndex + 1);
-                                    }}
-                                >
-                                    {cell}
-                                </td>
-                            ))}
-                        </tr>
-                    </>
+                        ))}
+                    </tr>
                 ))}
             </tbody>
         </table>
