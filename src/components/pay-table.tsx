@@ -1,4 +1,5 @@
 import './pay-table.scss';
+import { Fragment } from 'react';
 import { observer } from 'mobx-react-lite';
 import { multipliers } from '../constants/multipliers';
 import { Rankings } from '../types/Shared';
@@ -64,54 +65,48 @@ export const PayTable = observer((props: Props) => {
         <table className="pay-table">
             <tbody>
                 {tableData.map((row, rowIndex) => (
-                    <tr
-                        className="pay-table__row pay-table__row--mobile"
-                        key={`mobile-row-${rowIndex}`}
-                    >
-                        <td
-                            colSpan={5}
-                            className={`pay-table__cell pay-table__cell--name ${
-                                ranking &&
-                                ranking.name === row.name &&
-                                'pay-table__cell--highlighted'
-                            }`}
-                        >
-                            {row.title}
-                        </td>
-                    </tr>
-                ))}
-                {tableData.map((row, rowIndex) => (
-                    <tr
-                        className="pay-table__row"
-                        key={`row-${rowIndex}`}
-                    >
-                        <td
-                            className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
-                                ranking &&
-                                ranking.name === row.name &&
-                                'pay-table__cell--highlighted'
-                            }`}
-                        >
-                            {row.title}
-                        </td>
-                        {row.multipliers.map((cell, cellIndex) => (
+                    <Fragment key={`row-${rowIndex}`}>
+                        <tr className="pay-table__row pay-table__row--mobile">
                             <td
-                                key={`${rowIndex}${cellIndex}`}
-                                className={`pay-table__cell pay-table__cell--pay ${
-                                    bet - 1 === cellIndex && 'pay-table__cell--selected'
-                                } ${
+                                colSpan={5}
+                                className={`pay-table__cell pay-table__cell--name ${
                                     ranking &&
                                     ranking.name === row.name &&
                                     'pay-table__cell--highlighted'
                                 }`}
-                                onClick={() => {
-                                    if (!gameIsOn) columnClickCallback(cellIndex + 1);
-                                }}
                             >
-                                {cell}
+                                {row.title}
                             </td>
-                        ))}
-                    </tr>
+                        </tr>
+                        <tr className="pay-table__row">
+                            <td
+                                className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
+                                    ranking &&
+                                    ranking.name === row.name &&
+                                    'pay-table__cell--highlighted'
+                                }`}
+                            >
+                                {row.title}
+                            </td>
+                            {row.multipliers.map((cell, cellIndex) => (
+                                <td
+                                    key={`${rowIndex}${cellIndex}`}
+                                    className={`pay-table__cell pay-table__cell--pay ${
+                                        bet - 1 === cellIndex && 'pay-table__cell--selected'
+                                    } ${
+                                        ranking &&
+                                        ranking.name === row.name &&
+                                        'pay-table__cell--highlighted'
+                                    }`}
+                                    onClick={() => {
+                                        if (!gameIsOn) columnClickCallback(cellIndex + 1);
+                                    }}
+                                >
+                                    {cell}
+                                </td>
+                            ))}
+                        </tr>
+                    </Fragment>
                 ))}
             </tbody>
         </table>
