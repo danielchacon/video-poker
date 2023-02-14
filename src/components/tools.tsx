@@ -21,7 +21,7 @@ export const Tools = observer((props: Props) => {
 
     return (
         <div className="tools">
-            <div>
+            <div className="tools__item">
                 <Button
                     disabled={gameIsOn}
                     onClickCallback={props.raiseBetCallback}
@@ -29,8 +29,10 @@ export const Tools = observer((props: Props) => {
                     Ставка
                 </Button>
             </div>
-            <div className="tools__bet">{bet}$</div>
-            <div>
+            <div className="tools__item">
+                <div className="tools__bet">{bet}$</div>
+            </div>
+            <div className="tools__item">
                 <Button
                     theme="alert"
                     disabled={gameIsOn}
@@ -39,7 +41,7 @@ export const Tools = observer((props: Props) => {
                     Макс.
                 </Button>
             </div>
-            <div>
+            <div className="tools__item">
                 <Button
                     disabled={!(ranking !== null && gameIsOn === false)}
                     onClickCallback={props.doubleCallback}
@@ -47,7 +49,7 @@ export const Tools = observer((props: Props) => {
                     Удвоить
                 </Button>
             </div>
-            <div>
+            <div className="tools__item">
                 <Button
                     theme="primary"
                     disabled={gameIsOn && isDoubleMode}
