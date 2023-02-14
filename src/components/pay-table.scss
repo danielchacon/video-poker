@@ -3,12 +3,31 @@
     width: 100%;
     border-collapse: collapse;
     background-color: $color-2;
+    @media (max-width: $breakpoint-mobile) {
+        table-layout: fixed;
+    }
+    &__row {
+        &--mobile {
+            display: none;
+            @media (max-width: $breakpoint-mobile) {
+                display: table-row;
+            }
+        }
+        &--desktop {
+            @media (max-width: $breakpoint-mobile) {
+                display: none;
+            }
+        }
+    }
     &__cell {
         padding: 0.2em 0.5em;
         color: $color-3;
         font-size: $base-font-size;
         font-weight: bold;
         text-transform: uppercase;
+        @media (max-width: $breakpoint-mobile) {
+            font-size: $base-font-size-mobile;
+        }
         &--pay {
             text-align: center;
         }
@@ -17,7 +36,17 @@
         }
         &--highlighted#{&}--name,
         &--highlighted#{&}--selected {
-            color: $color-5
+            color: $color-5;
+        }
+        &--desktop {
+            @media (max-width: $breakpoint-mobile) {
+                display: none;
+            }
+        }
+        &--name {
+            @media (max-width: $breakpoint-mobile) {
+                text-align: center;
+            }
         }
     }
 }

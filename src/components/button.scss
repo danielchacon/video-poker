@@ -11,6 +11,9 @@
     font-size: $base-font-size;
     font-weight: bold;
     text-transform: uppercase;
+    @media (max-width: $breakpoint-mobile) {
+        font-size: $base-font-size-mobile;
+    }
     &--theme-primary {
         background-color: $color-3;
     }

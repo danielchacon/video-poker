@@ -60,31 +60,50 @@ export const PayTable = observer((props: Props) => {
     ];
 
     return (
-        <table className='pay-table'>
+        <table className="pay-table">
             <tbody>
                 {tableData.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        <td
-                            className={`pay-table__cell pay-table__cell--name ${
-                                ranking && ranking.name === row.name ? 'pay-table__cell--highlighted' : ''
-                            }`}
-                        >
-                            {row.title}
-                        </td>
-                        {row.multipliers.map((cell, cellIndex) => (
-                            <td
-                                key={`${rowIndex}${cellIndex}`}
-                                className={`pay-table__cell pay-table__cell--pay ${bet - 1 === cellIndex ? 'pay-table__cell--selected' : ''} ${
-                                    ranking && ranking.name === row.name ? 'pay-table__cell--highlighted' : ''
+                    <>
+                        <tr className='pay-table__row pay-table__row--mobile' key={rowIndex}>
+                            <td colSpan={5}
+                                className={`pay-table__cell pay-table__cell--name ${
+                                    ranking && ranking.name === row.name
+                                        ? 'pay-table__cell--highlighted'
+                                        : ''
                                 }`}
-                                onClick={() => {
-                                    if (!gameIsOn) props.columnClickCallback(cellIndex + 1);
-                                }}
                             >
-                                {cell}
+                                {row.title}
                             </td>
-                        ))}
-                    </tr>
+                        </tr>
+                        <tr className='pay-table__row' key={rowIndex}>
+                            <td
+                                className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
+                                    ranking && ranking.name === row.name
+                                        ? 'pay-table__cell--highlighted'
+                                        : ''
+                                }`}
+                            >
+                                {row.title}
+                            </td>
+                            {row.multipliers.map((cell, cellIndex) => (
+                                <td
+                                    key={`${rowIndex}${cellIndex}`}
+                                    className={`pay-table__cell pay-table__cell--pay ${
+                                        bet - 1 === cellIndex ? 'pay-table__cell--selected' : ''
+                                    } ${
+                                        ranking && ranking.name === row.name
+                                            ? 'pay-table__cell--highlighted'
+                                            : ''
+                                    }`}
+                                    onClick={() => {
+                                        if (!gameIsOn) props.columnClickCallback(cellIndex + 1);
+                                    }}
+                                >
+                                    {cell}
+                                </td>
+                            ))}
+                        </tr>
+                    </>
                 ))}
             </tbody>
         </table>

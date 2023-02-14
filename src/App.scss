@@ -7,10 +7,14 @@
     min-height: 100vh;
     &__inner {
         display: grid;
-        grid-template-rows: 245px 180px;
+        grid-template-rows: auto 180px;
         gap: 20px;
         max-width: 100%;
         padding: 15px;
+        @media (max-width: $breakpoint-mobile) {
+            grid-template-rows: auto;
+            gap: 10px;
+        }
     }
     &__hand-wrapper {
         display: grid;
@@ -21,5 +25,8 @@
         font-size: $base-font-size * 3;
         font-weight: bold;
         text-align: center;
+        @media (max-width: $breakpoint-mobile) {
+            font-size: $base-font-size-mobile * 3;
+        }
     }
 }
