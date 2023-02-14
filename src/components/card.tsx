@@ -16,10 +16,10 @@ export const Card = (props: Props) => {
 
     return (
         <div
-            className={`card ${isHighlighted ? 'card--highlighted' : ''} ${
-                disabled ? 'card--disabled' : ''
-            } ${pressed ? 'card--pressed' : ''} ${clickable ? 'card--clickable' : ''} ${
-                hidden ? 'card--hidden' : ''
+            className={`card ${isHighlighted && 'card--highlighted'} ${
+                disabled && 'card--disabled'
+            } ${pressed && 'card--pressed'} ${clickable && 'card--clickable'} ${
+                hidden && 'card--hidden'
             }`}
             onClick={onClickCallback}
             role="button"
@@ -27,9 +27,10 @@ export const Card = (props: Props) => {
         >
             <div
                 className={`card__name ${
-                    card.suit.name === SuitNames.DIAMONDS || card.suit.name === SuitNames.HEARTS
-                        ? 'card__name--red'
-                        : ''
+                    (card.suit.name === SuitNames.DIAMONDS ||
+                        card.suit.name === SuitNames.HEARTS) &&
+                    'card__name--red'
+                })
                 }`}
             >
                 {hidden ? (

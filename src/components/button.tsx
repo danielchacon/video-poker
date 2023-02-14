@@ -13,9 +13,9 @@ export const Button = (props: Props) => {
 
     return (
         <button
-            className={`button ${
-                pressed ? 'button--pressed' : ''
-            } button--theme-${theme ? theme : 'default'}`}
+            className={`button ${pressed && 'button--pressed'} button--theme-${
+                theme ? theme : 'default'
+            }`}
             type="button"
             disabled={disabled}
             onClick={onClickCallback}

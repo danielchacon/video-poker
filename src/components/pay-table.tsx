@@ -72,9 +72,9 @@ export const PayTable = observer((props: Props) => {
                             <td
                                 colSpan={5}
                                 className={`pay-table__cell pay-table__cell--name ${
-                                    ranking && ranking.name === row.name
-                                        ? 'pay-table__cell--highlighted'
-                                        : ''
+                                    ranking &&
+                                    ranking.name === row.name &&
+                                    'pay-table__cell--highlighted'
                                 }`}
                             >
                                 {row.title}
@@ -86,9 +86,9 @@ export const PayTable = observer((props: Props) => {
                         >
                             <td
                                 className={`pay-table__cell pay-table__cell--name pay-table__cell--desktop ${
-                                    ranking && ranking.name === row.name
-                                        ? 'pay-table__cell--highlighted'
-                                        : ''
+                                    ranking &&
+                                    ranking.name === row.name &&
+                                    'pay-table__cell--highlighted'
                                 }`}
                             >
                                 {row.title}
@@ -97,11 +97,11 @@ export const PayTable = observer((props: Props) => {
                                 <td
                                     key={`${rowIndex}${cellIndex}`}
                                     className={`pay-table__cell pay-table__cell--pay ${
-                                        bet - 1 === cellIndex ? 'pay-table__cell--selected' : ''
+                                        bet - 1 === cellIndex && 'pay-table__cell--selected'
                                     } ${
-                                        ranking && ranking.name === row.name
-                                            ? 'pay-table__cell--highlighted'
-                                            : ''
+                                        ranking &&
+                                        ranking.name === row.name &&
+                                        'pay-table__cell--highlighted'
                                     }`}
                                     onClick={() => {
                                         if (!gameIsOn) columnClickCallback(cellIndex + 1);
