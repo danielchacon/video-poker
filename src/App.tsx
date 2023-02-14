@@ -184,7 +184,7 @@ const App = observer(() => {
                     {gameStore.state.hand.length ? (
                         <Hand cardClickCallback={card => handleCardClick(card)} />
                     ) : (
-                        <div className="app__hand-placeholder">VIDEO POKER</div>
+                        <div className="app__hand-placeholder">ВИДЕОПОКЕР</div>
                     )}
                 </div>
                 <UserBar />
