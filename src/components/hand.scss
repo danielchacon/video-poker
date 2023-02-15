@@ -13,11 +13,9 @@
         line-height: 0;
     }
     &__status {
+        color: $color-5;
         &--lock {
-            color: $color-3;
-        }
-        &--unlock {
-            color: rgba($color-5, 0.3);
+            color: $color-2;
         }
         svg {
             width: 30px;

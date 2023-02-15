@@ -33,10 +33,13 @@
         }
         &--selected {
             background-color: $color-4;
+            color: $color-11;
         }
-        &--highlighted#{&}--name,
+        &--highlighted {
+            background-color: $color-12;
+        }
         &--highlighted#{&}--selected {
-            color: $color-5;
+            background-color: $color-2;
         }
         &--desktop {
             @media (max-width: $breakpoint-mobile) {

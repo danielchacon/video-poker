@@ -41,6 +41,7 @@ export const Hand = observer((props: Props) => {
                                     (ranking &&
                                         ranking.cards &&
                                         ranking.cards.some(el => el.id === card.id)) ||
+                                    (ranking && ranking.cards === undefined) ||
                                     false
                                 }
                                 disabled={disabled}

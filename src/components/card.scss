@@ -21,18 +21,19 @@
     &__name {
         font-size: $base-font-size * 2;
         font-weight: bold;
-        color: $color-6;
+        color: $color-15;
         @media (max-width: $breakpoint-mobile) {
             font-size: $base-font-size-mobile * 2;
         }
         &--red {
-            color: $color-4;
+            color: $color-14;
         }
     }
     &--hidden &__name {
-        color: $color-6;
+        color: $color-15;
     }
     &--highlighted {
-        background-color: $color-7;
+        background-image: linear-gradient(0deg, $color-13, white);
+        background-image: linear-gradient(0deg, $color-13, $color-13 10%, white 10%, white);
     }
 }

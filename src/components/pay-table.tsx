@@ -70,9 +70,9 @@ export const PayTable = observer((props: Props) => {
                             <td
                                 colSpan={5}
                                 className={`pay-table__cell pay-table__cell--name ${
-                                    ranking &&
-                                    ranking.name === row.name &&
-                                    'pay-table__cell--highlighted'
+                                    ranking && ranking.name === row.name
+                                        ? 'pay-table__cell--highlighted'
+                                        : ''
                                 }`}
                             >
                                 {row.title}

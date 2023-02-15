@@ -187,7 +187,9 @@ const App = observer(() => {
                         <div className="app__hand-placeholder">ВИДЕОПОКЕР</div>
                     )}
                 </div>
-                <UserBar />
+                <div>
+                    <UserBar />
+                </div>
                 <Tools
                     raiseBetCallback={() => changeBetSize(false)}
                     maxBetCallback={handleMaxBet}

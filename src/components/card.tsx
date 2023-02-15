@@ -16,10 +16,10 @@ export const Card = (props: Props) => {
 
     return (
         <div
-            className={`card ${isHighlighted && 'card--highlighted'} ${
-                disabled && 'card--disabled'
-            } ${pressed && 'card--pressed'} ${clickable && 'card--clickable'} ${
-                hidden && 'card--hidden'
+            className={`card ${isHighlighted ? 'card--highlighted' : ''} ${
+                disabled ? 'card--disabled' : ''
+            } ${pressed ? 'card--pressed' : ''} ${clickable ? 'card--clickable' : ''} ${
+                hidden ? 'card--hidden' : ''
             }`}
             onClick={onClickCallback}
             role="button"
