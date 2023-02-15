@@ -30,7 +30,6 @@ export const Card = (props: Props) => {
                     (card.suit.name === SuitNames.DIAMONDS ||
                         card.suit.name === SuitNames.HEARTS) &&
                     'card__name--red'
-                })
                 }`}
             >
                 {hidden ? (
