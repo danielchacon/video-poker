@@ -180,14 +180,14 @@ const App = observer(() => {
                         });
                     }}
                 />
-                <div className="app__hand-wrapper">
-                    {gameStore.state.hand.length ? (
+                {gameStore.state.hand.length ? (
+                    <div className="app__hand-wrapper">
                         <Hand cardClickCallback={card => handleCardClick(card)} />
-                    ) : (
-                        <div className="app__hand-placeholder">ВИДЕОПОКЕР</div>
-                    )}
-                </div>
-                <div>
+                    </div>
+                ) : (
+                    <div className="app__hand-placeholder">ВИДЕОПОКЕР</div>
+                )}
+                <div className="app__user-bar-wrapper">
                     <UserBar />
                 </div>
                 <Tools

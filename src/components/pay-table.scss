@@ -2,7 +2,7 @@
 .pay-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: $color-2;
+    background-color: $color-4;
     @media (max-width: $breakpoint-mobile) {
         table-layout: fixed;
     }
@@ -21,7 +21,7 @@
     }
     &__cell {
         padding: 0.2em 0.5em;
-        color: $color-3;
+        color: $color-6;
         font-size: $base-font-size;
         font-weight: bold;
         text-transform: uppercase;
@@ -32,14 +32,19 @@
             text-align: center;
         }
         &--selected {
-            background-color: $color-4;
-            color: $color-11;
+            background-color: $color-5;
+            color: $color-7;
         }
         &--highlighted {
-            background-color: $color-12;
+            background-color: $color-2;
         }
         &--highlighted#{&}--selected {
-            background-color: $color-2;
+            background-color: $color-4;
+        }
+        &--highlighted#{&}--name {
+            @media (max-width: $breakpoint-mobile) {
+                background-color: $color-2;
+            }
         }
         &--desktop {
             @media (max-width: $breakpoint-mobile) {
@@ -48,6 +53,7 @@
         }
         &--name {
             @media (max-width: $breakpoint-mobile) {
+                background-color: $color-5;
                 text-align: center;
             }
         }

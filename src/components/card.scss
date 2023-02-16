@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 140px;
-    background-color: $color-5;
+    background-color: $color-1;
     border-radius: 5%;
     user-select: none;
     @media (max-width: $breakpoint-mobile) {
@@ -21,19 +21,19 @@
     &__name {
         font-size: $base-font-size * 2;
         font-weight: bold;
-        color: $color-15;
+        color: $color-8;
         @media (max-width: $breakpoint-mobile) {
             font-size: $base-font-size-mobile * 2;
         }
         &--red {
-            color: $color-14;
+            color: $color-9;
         }
     }
     &--hidden &__name {
-        color: $color-15;
+        color: $color-8;
     }
     &--highlighted {
-        background-image: linear-gradient(0deg, $color-13, white);
-        background-image: linear-gradient(0deg, $color-13, $color-13 10%, white 10%, white);
+        background-image: linear-gradient(0deg, $color-3, white);
+        background-image: linear-gradient(0deg, $color-3, $color-3 10%, white 10%, white);
     }
 }

@@ -2,8 +2,8 @@
 .button {
     border: 0;
     padding: 1em 0.5em;
-    background-color: $color-5;
-    color: $color-15;
+    background-color: $color-1;
+    color: $color-8;
     box-shadow: 0 8px 9px -5px #0003, 0 15px 22px 2px #00000024, 0 6px 28px 5px #0000001f;
     cursor: pointer;
     width: 100%;
@@ -15,20 +15,20 @@
         font-size: $base-font-size-mobile;
     }
     &--theme-primary {
-        background-color: $color-2;
+        background-color: $color-4;
     }
     &--theme-alert {
-        background-color: $color-14;
-        color: $color-5;
+        background-color: $color-9;
+        color: $color-1;
     }
     &[disabled] {
-        background-color: $color-5;
-        color: rgba($color-15, 0.3);
+        background-color: $color-1;
+        color: rgba($color-8, 0.3);
         cursor: default;
     }
     &[disabled]#{&}--round {
         svg {
-            color: $color-9;
+            color: rgba($color-8, 0.3);
         }
     }
 }

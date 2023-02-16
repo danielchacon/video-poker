@@ -5,6 +5,9 @@
     justify-content: center;
     grid-template-columns: minmax(0, 630px);
     min-height: 100vh;
+    @media (max-width: $breakpoint-mobile) {
+        display: block;
+    }
     &__inner {
         display: grid;
         grid-template-rows: auto 180px;
@@ -21,12 +24,18 @@
         align-items: center;
     }
     &__hand-placeholder {
-        color: $color-5;
+        display: grid;
+        align-items: center;
+        color: $color-1;
         font-size: $base-font-size * 3;
         font-weight: bold;
         text-align: center;
         @media (max-width: $breakpoint-mobile) {
+            grid-row: 1 / 2;
             font-size: $base-font-size-mobile * 3;
         }
+    }
+    &__user-bar-wrapper {
+        text-align: center;
     }
 }
